@@ -677,7 +677,7 @@ def statistics(mat_df):
     return df[["Expression pattern",'count']]
 
 
-def save_data(dictionary, column_names,save_path,name,p_val,pro,gprofil=False):
+def save_data(dictionary, column_names,save_path,name,p_val,pro,gprofil=False, organism='hsapiens'):
     """
     Generate a table from a dictionary of gene data and save it along with associated files.
 
@@ -689,6 +689,7 @@ def save_data(dictionary, column_names,save_path,name,p_val,pro,gprofil=False):
         p_val (float): The threshold for the adjusted p-value for significance.
         pro (pd.DataFrame): A Pandas DataFrame containing additional protein-related data.
         gprofil (bool): If True, perform GProfiler analysis and save the results.
+        organism (str): organism_ID of interest organsim 
 
     Returns:
         None
@@ -784,7 +785,7 @@ def save_data(dictionary, column_names,save_path,name,p_val,pro,gprofil=False):
             if gprofil:
                 gp = GProfiler(return_dataframe=True,)
                 genes_lists=list(df_exp['Gene ID'][0:])
-                df=gp.profile(organism='hsapiens',
+                df=gp.profile(organism= organism,
                         query=genes_lists,no_evidences=False)
                 if not os.path.exists(save_path+name+'/'+'Gprofiler'):
                     os.makedirs(save_path+name+'/'+'Gprofiler')
