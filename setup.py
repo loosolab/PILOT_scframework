@@ -27,7 +27,6 @@ setup(
             "elpigraph-python",
             "adjusttext",
             "gprofiler-official",
-            "rpy2",
             "gseapy"
         ],
         packages=find_packages()
