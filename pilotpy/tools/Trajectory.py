@@ -658,7 +658,8 @@ def cell_importance(adata,
                     save_as_pdf = True,
                     figsize = (12, 12),
                     col_cluster = True,
-                    row_cluster = False):
+                    row_cluster = False
+                   organism='hsapiens'):
     """
     Order cells based on estimated time and visualize cell type importance.
 
@@ -696,6 +697,8 @@ def cell_importance(adata,
         Whether to cluster columns in the heatmap, by default True.
     row_cluster : bool, optional
         Whether to cluster rows in the heatmap, by default False.
+    organism : str, optional, by default 'hsapiens'.
+        Pass desired organsim-ID for gprofiler. 
 
     Returns
     -------
@@ -792,7 +795,7 @@ def cell_importance(adata,
               ['Cell name', 'Expression pattern', 'Slope', 'Fitted function',
                'Intercept', 'Treat', 'Treat2', 'adjusted P-value', 'R-squared',
                'mod_rsquared_adj'], path + '/Cell_type_Report/', 'Cells_Importance',
-              p_val = p_val, pro = None)
+              p_val = p_val, pro = None, organism = organism)
     
     
     
