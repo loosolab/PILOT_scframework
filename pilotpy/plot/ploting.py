@@ -35,7 +35,7 @@ from ..tools.Gene_cluster_specific_functions import *
 
 
 
-def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1, clusters = 'status',label_act = False,colors=['#377eb8','#ff7f00','#e41a1c'],location_labels='center', figsize=(12,12),font_size=24,axes_line_width=1,axes_color='black',facecolor='white',point_size=100,cmap='viridis',fontsize_legend=24,alpha_trans=1,plot_titel = "Trajectory of the disease progression"):
+def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1, clusters = 'status',label_act = False,colors=False,location_labels='center', figsize=(12,12),font_size=24,axes_line_width=1,axes_color='black',facecolor='white',point_size=100,cmap='viridis',fontsize_legend=24,alpha_trans=1,plot_titel = "Trajectory of the disease progression"):
     
     
     
@@ -62,7 +62,7 @@ def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1,
     label_act : bool, optional
         Whether to label data points with sample IDs, by default False.
     colors : list, optional
-        List of colors for different categories, by default ['#377eb8', '#ff7f00', '#e41a1c'].
+        List of colors for different categories, by default the function will generate max. 20 colors.
     location_labels : str, optional
         Location of the legend labels, by default 'center'.
     figsize : tuple, optional
@@ -100,7 +100,11 @@ def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1,
     if not os.path.exists(path):
         os.makedirs(path)
         
-        
+    #get colors from colormap 'tab20', max. 20 colors 
+    size= len(adata.obs["timepoint"].cat.categories)
+    cmap = plt.get_cmap('tab20')
+    values=np.linspace(0,1,size)
+    colors = cmap(values)
     custom_cycler = (cycler(color=colors))
     
     plot_titel = plot_titel
