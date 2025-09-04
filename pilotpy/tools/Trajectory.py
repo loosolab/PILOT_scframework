@@ -658,7 +658,7 @@ def cell_importance(adata,
                     save_as_pdf = True,
                     figsize = (12, 12),
                     col_cluster = True,
-                    row_cluster = False
+                    row_cluster = False,
                    organism='hsapiens'):
     """
     Order cells based on estimated time and visualize cell type importance.
