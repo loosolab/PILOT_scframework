@@ -930,7 +930,7 @@ def qq_plot_gene(target, data, sorted_best, gene_name):
     stats.probplot( (best_tf - predictions), dist="norm", plot=pylab)
     pylab.show()
 
-def plot_best_matches_cell_types(target, data,df,sorted_best, scale_name, min_target=0, max_target=35,num=11,width=25,height=25,xlim=4,point_size=100,color_back=None,fontsize=28,alpha=1,cmap='viridis'):
+def plot_best_matches_cell_types(target, data,df,sorted_best, scale_name, min_target=0, max_target=35,num=11,width=25,height=25,xlim=4,point_size=100,color_back=None,fontsize=28,alpha=1,cmap='viridis',axis='samples'):
     """
     Plot the best-fitted models for cell types.
 
@@ -959,12 +959,15 @@ def plot_best_matches_cell_types(target, data,df,sorted_best, scale_name, min_ta
     
     sorted_best = dict(sorted(sorted_best.items(), key=lambda x: x[1][-1]))
 
-    x = np.array(list(data['label']))
-    min_x = min(x)
-    max_x = max(x)
-    start=df[df['Time_score']==min_x]['sampleID'].unique()
-    end=df[df['Time_score']==max_x]['sampleID'].unique()
-    xlabel='From  '+ start+'  to  '+end
+
+    if (axis == "samples"):
+        x = np.array(list(data['label']))
+        min_x = min(x)
+        max_x = max(x)
+    elif (axis == "timepoints"):
+        x = np.array(list(df[df['Time_score']]['sampleID'].unique()))
+        # end=df[df['Time_score']==max_x]['sampleID'].unique()
+        # xlabel='From  '+ start+'  to  '+end
     
     plt.figure(figsize=((width, height)))
     plt.subplots_adjust(wspace = 0.5, hspace = 1 )
