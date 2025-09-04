@@ -5,7 +5,7 @@ setup(
     version='2.0.6',
     author='Mehdi Joodaki',
     author_email='judakimehdi@gmail.com',
-    url='https://github.com/CostaLab/PILOT_fork',
+    url='https://github.com/dlnija/PILOT_fork',
     install_requires=[
             "cycler",
             "joypy",
