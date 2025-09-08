@@ -101,7 +101,7 @@ def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1,
         os.makedirs(path)
         
     #get colors from colormap 'tab20', max. 20 colors 
-    size= len(adata.obs["timepoint"].cat.categories)
+    size= len(clusters)
     cmap = plt.get_cmap('tab20')
     values=np.linspace(0,1,size)
     colors = cmap(values)
@@ -781,6 +781,7 @@ def exploring_specific_genes(cluster_name='cell_type',font_size=24,gene_list=[],
 
     # Display the PNG image
     ax.imshow(image)
+    #ax.set_xticks()
     ax.axis('off')  # Turn off axis labels and ticks
     plt.show()
     
@@ -955,21 +956,28 @@ def plot_best_matches_cell_types(target, data,df,sorted_best, scale_name, min_ta
     Returns:
         None: This function generates the plot but does not return any value.
     """
-
+    
     
     sorted_best = dict(sorted(sorted_best.items(), key=lambda x: x[1][-1]))
+    
+    
 
-
-    if (axis == "samples"):
-        x = np.array(list(data['label']))
-        min_x = min(x)
-        max_x = max(x)
-    elif (axis == "timepoints"):
-        x = np.array(list(df[df['Time_score']]['sampleID'].unique()))
+    
+    x = np.array(list(data['label']))
+    xlabel= np.array(list(df['sampleID']))
+    min_x = min(x)
+    max_x = max(x)
+    
         # end=df[df['Time_score']==max_x]['sampleID'].unique()
         # xlabel='From  '+ start+'  to  '+end
     
-    plt.figure(figsize=((width, height)))
+    if (axis == "samples"):
+            plt.figure(figsize=((width, height)))
+    elif (axis == "timepoints"):
+            width = 6* len(df['sampleID'])
+            height = 8* len(sorted_best) 
+            plt.figure(figsize=((width, height)))
+    
     plt.subplots_adjust(wspace = 0.5, hspace = 1 )
    # plt.suptitle(xlabel, fontsize=20, y=0.95)
     plt.tight_layout()
@@ -989,7 +997,13 @@ def plot_best_matches_cell_types(target, data,df,sorted_best, scale_name, min_ta
         polyline = generate_feature(best_func, polyline)
         
         ax = plt.subplot(math.ceil(num/4), 4, j)
-        plt.xticks(np.arange(min_x,max_x,xlim))
+        
+        if (axis == "samples"):
+            plt.xticks(np.arange(min_x,max_x,xlim))
+        elif (axis == "timepoints"):
+            plt.xticks(x,xlabel, rotation=45, ha='right')  
+      
+            
         if color_back!=None:
             ax.set_facecolor(color_back)
         ax.scatter(x, best_tf, c =best_tf ,cmap=cmap,alpha=alpha,s=point_size)

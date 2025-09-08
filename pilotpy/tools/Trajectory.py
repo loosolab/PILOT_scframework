@@ -659,7 +659,9 @@ def cell_importance(adata,
                     figsize = (12, 12),
                     col_cluster = True,
                     row_cluster = False,
-                   organism='hsapiens'):
+                   organism='hsapiens',
+                   axis='samples', 
+                   gprofil= False):
     """
     Order cells based on estimated time and visualize cell type importance.
 
@@ -779,7 +781,8 @@ def cell_importance(adata,
                                              color_back = color_back,
                                              fontsize = fontsize,
                                              alpha = alpha,
-                                             cmap = cmap_proportions)
+                                             cmap = cmap_proportions,
+                                             axis = axis)
                 plt.savefig(path + "/" + suffix)
     
     
@@ -795,7 +798,7 @@ def cell_importance(adata,
               ['Cell name', 'Expression pattern', 'Slope', 'Fitted function',
                'Intercept', 'Treat', 'Treat2', 'adjusted P-value', 'R-squared',
                'mod_rsquared_adj'], path + '/Cell_type_Report/', 'Cells_Importance',
-              p_val = p_val, pro = None, organism = organism)
+              p_val = p_val, pro = None, organism = organism, gprofil = gprofil)
     
     
     
