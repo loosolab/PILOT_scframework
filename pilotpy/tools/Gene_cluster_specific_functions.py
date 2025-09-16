@@ -618,10 +618,8 @@ def extend_stats(all_stats: pd.DataFrame = None,
         # for col in col_names:
         #     all_stats_extend.at[i, 'fit-'+str(col)] = data[data['Gene ID'] == row['gene']][str(col)].values[0]
        
-    if  os.path.exists(path_to_results + "/gene_clusters_stats_extend.csv"):
-        all_stats_extend.to_csv(path_to_results + "/gene_clusters_stats_extend_exploring_specific_genes.csv", index = None)
-    else:
-        all_stats_extend.to_csv(path_to_results + "/gene_clusters_stats_extend.csv", index = None)
+    all_stats_extend.to_csv(path_to_results + "/gene_clusters_stats_extend.csv", index = None)#
+                   
     return all_stats_extend
 
 def get_coordinates(WT_adata: pd.DataFrame = None,
