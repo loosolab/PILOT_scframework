@@ -9,7 +9,7 @@ from sklearn.covariance import empirical_covariance
 from numpy.linalg import eig
 from scipy import stats
 from sklearn.linear_model import HuberRegressor, LinearRegression
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import root_mean_squared_error
 import statsmodels
 from statsmodels.stats.multitest import multipletests
 import statsmodels.stats as smf
@@ -22,6 +22,7 @@ from matplotlib.lines import Line2D
 from decimal import Decimal
 from matplotlib.ticker import FormatStrFormatter
 import pickle
+from warnings import warn
 
 
 def get_gene_dict(gene_list: list = None,
@@ -345,7 +346,7 @@ def _fit_model_(func_type: str = None,
     predictions = model.predict(X)
     results['rsquared_adj'] = 1 - (1 - model.score(X, y)) * (len(y) - 1) / \
                                     (len(y) - X.shape[1] - 1)
-    results['rmse'] = mean_squared_error(y, predictions, squared=False)
+    results['rmse'] = root_mean_squared_error(y, predictions, squared=False)
 
     new_X = np.append(np.ones((len(X),1)), X, axis=1)
     M_S_E = (sum((y-predictions)**2)) / (len(new_X)-len(new_X[0]))
