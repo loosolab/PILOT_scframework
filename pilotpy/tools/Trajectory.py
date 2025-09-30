@@ -927,14 +927,9 @@ def genes_importance(adata,name_cell,col='Time_score',genes_index=[],p_value=0.0
 
     
     path='Results_PILOT'
-    if not os.path.exists(path+'/cells/'+name_cell+'.csv'):
-        data=extract_cells_from_gene_expression(adata,sample_col=sample_col,col_cell=col_cell,cell_list=[name_cell],normalize=normalize)
     
-    elif os.path.exists(path+'/cells/'+name_cell+'.csv'):
-        
-        data =loadTarget(path+'/cells/', name_cell)
-        
-        
+    data=extract_cells_from_gene_expression(adata,sample_col=sample_col,col_cell=col_cell,cell_list=[name_cell],normalize=normalize)
+     
     if len(colnames)!=0:  #for pathmics data
         for col in colnames:
             data[col]=np.log(data[col]+1)
