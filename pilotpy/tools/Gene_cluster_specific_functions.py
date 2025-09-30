@@ -346,7 +346,7 @@ def _fit_model_(func_type: str = None,
     predictions = model.predict(X)
     results['rsquared_adj'] = 1 - (1 - model.score(X, y)) * (len(y) - 1) / \
                                     (len(y) - X.shape[1] - 1)
-    results['rmse'] = root_mean_squared_error(y, predictions, squared=False)
+    results['rmse'] = root_mean_squared_error(y, predictions)
 
     new_X = np.append(np.ones((len(X),1)), X, axis=1)
     M_S_E = (sum((y-predictions)**2)) / (len(new_X)-len(new_X[0]))
