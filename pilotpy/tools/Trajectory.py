@@ -663,7 +663,7 @@ def cell_importance(adata,
                    axis='samples', 
                    gprofil= False,
                    path_plt='Results_PILOT/plots',
-                   path_table=path_to_results):
+                   path_table= path_to_results):
     """
     Order cells based on estimated time and visualize cell type importance.
 
@@ -716,7 +716,7 @@ def cell_importance(adata,
 
     
     path_plt=path_plt
-    path_table=path_to_results
+    path_table=path_table
 
     real_labels = adata.uns['real_labels']
     pseudotime = adata.uns['pseudotime']
