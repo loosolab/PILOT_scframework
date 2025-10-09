@@ -663,7 +663,7 @@ def cell_importance(adata,
                    axis='samples', 
                    gprofil= False,
                    path_plt='Results_PILOT/plots',
-                   path_table= path_to_results):
+                   path_table='Results_PILOT/plots'):
     """
     Order cells based on estimated time and visualize cell type importance.
 
@@ -706,7 +706,7 @@ def cell_importance(adata,
     path_plt : str, optional
         Path to save the plots, by default 'Results_PILOT/plots'. 
     path_table : str, optional
-        Path to save the tables, by default path_to_results.
+        Path to save the tables, by default 'Results_PILOT/plots'.
     Returns
     -------
     None
