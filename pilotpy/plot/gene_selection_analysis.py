@@ -1291,7 +1291,8 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
                                  cell_type: str,
                                  gene_set_library: str = 'MSigDB_Hallmark_2020',
                                  cmap: str = 'coolwarm',
-                                 font_size: int = 14):
+                                 font_size: int = 14,
+                                 path: str = 'Results_PILOT/plots/'):
     """
     
 
@@ -1318,6 +1319,7 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
     None.
 
     """
+    path=path
     save_cell_type = adata.uns['gene_selection_heatmap']['cell_type']
     if save_cell_type == cell_type:
         curves_activities = adata.uns['gene_selection_heatmap']['curves_activities']
@@ -1359,9 +1361,9 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
         ans.cax.yaxis.set_label_coords(-1.5,0.5)
 
         plt.show()
-        plt.savefig("pathways.pdf",
+        plt.savefig(path + str(cell_type) + "pathways.pdf",
                     bbox_inches='tight', 
-                    transparent=True,)
+                    transparent=True)
     else:
         return "Please run the funtion genes_selection_heatmap first!"        
         

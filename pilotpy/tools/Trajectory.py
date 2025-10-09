@@ -661,7 +661,9 @@ def cell_importance(adata,
                     row_cluster = False,
                    organism='hsapiens',
                    axis='samples', 
-                   gprofil= False):
+                   gprofil= False,
+                   path_plt='Results_PILOT/plots',
+                   path_table=path_to_results):
     """
     Order cells based on estimated time and visualize cell type importance.
 
@@ -700,8 +702,11 @@ def cell_importance(adata,
     row_cluster : bool, optional
         Whether to cluster rows in the heatmap, by default False.
     organism : str, optional, by default 'hsapiens'.
-        Pass desired organsim-ID for gprofiler. 
-
+        Pass desired organsim-ID for gprofiler.
+    path_plt : str, optional
+        Path to save the plots, by default 'Results_PILOT/plots'. 
+    path_table : str, optional
+        Path to save the tables, by default path_to_results.
     Returns
     -------
     None
@@ -710,7 +715,9 @@ def cell_importance(adata,
 
 
     
-    path = path_to_results
+    path_plt=path_plt
+    path_table=path_to_results
+
     real_labels = adata.uns['real_labels']
     pseudotime = adata.uns['pseudotime']
     annot = adata.uns['annot']
@@ -743,7 +750,7 @@ def cell_importance(adata,
     #Saving Heat map based on sorte pseuduscores of the Trajectory 
     
     heatmaps_df(normalized_df[cell_types], row_cluster=row_cluster,
-                col_cluster = col_cluster, cmap = cmap_heatmap, figsize = figsize) 
+                col_cluster=col_cluster, cmap=cmap_heatmap, figsize=figsize, path=path_plt) 
     #Building a model based on Regression and pseuduscores 
     pathies_cell_proportions['Time_score'] = list(emd_dataframe['pseudotime'])
     pathies_cell_proportions = pathies_cell_proportions.sort_values('Time_score', ascending = True)
@@ -783,21 +790,21 @@ def cell_importance(adata,
                                              alpha = alpha,
                                              cmap = cmap_proportions,
                                              axis = axis)
-                plt.savefig(path + "/" + suffix)
+                plt.savefig(path_plt + "/" + suffix)
     
     
     cellnames = list(sorted_best.keys())
     #return orders of samples based on the trejctory and selected cell-types
     
     
-    if not os.path.exists(path + '/Cell_type_Report'):
-        os.makedirs(path + '/Cell_type_Report')
+    if not os.path.exists(path_table + '/Cell_type_Report'):
+        os.makedirs(path_table + '/Cell_type_Report')
   
     
     save_data(sorted_best, 
               ['Cell name', 'Expression pattern', 'Slope', 'Fitted function',
                'Intercept', 'Treat', 'Treat2', 'adjusted P-value', 'R-squared',
-               'mod_rsquared_adj'], path + '/Cell_type_Report/', 'Cells_Importance',
+               'mod_rsquared_adj'], path_table + '/Cell_type_Report/', 'Cells_Importance',
               p_val = p_val, pro = None, organism = organism, gprofil = gprofil)
     
     
@@ -863,7 +870,7 @@ def extract_cells_from_gene_expression(adata,sample_col,col_cell,cell_list=[],no
 
 
             
-def genes_importance(adata,name_cell,col='Time_score',genes_index=[],p_value=0.05,max_iter_huber=100,epsilon_huber=1.35,x_lim=4,width=20,height=30,store_data=True,genes_interesting=[],modify_r2 = False,model_type = 'HuberRegressor',fontsize=8,alpha=0.5,cmap='viridis',color_back=None,save_as_pdf=False,plot_genes=True,colnames=[],sample_col='sampleID',col_cell='cell_types',normalize=True):
+def genes_importance(adata,name_cell,col='Time_score',genes_index=[],p_value=0.05,max_iter_huber=100,epsilon_huber=1.35,x_lim=4,width=20,height=30,store_data=True,genes_interesting=[],modify_r2 = False,model_type = 'HuberRegressor',fontsize=8,alpha=0.5,cmap='viridis',color_back=None,save_as_pdf=False,plot_genes=True,colnames=[],sample_col='sampleID',col_cell='cell_types',normalize=True, path='Results_PILOT'):
     
     """
     Order genes based on estimated time and visualize gene importance.
@@ -918,6 +925,8 @@ def genes_importance(adata,name_cell,col='Time_score',genes_index=[],p_value=0.0
         Name of the cell type column, by default 'cell_types'.
     normalize: bool, optional
         Whether to normalize gene exp, by default True.
+    path : str, optional
+        Path to save the results, by default 'Results_PILOT'.
 
     Returns
     -------
@@ -926,7 +935,7 @@ def genes_importance(adata,name_cell,col='Time_score',genes_index=[],p_value=0.0
     """
 
     
-    path='Results_PILOT'
+    path = path
     
     data=extract_cells_from_gene_expression(adata,sample_col=sample_col,col_cell=col_cell,cell_list=[name_cell],normalize=normalize)
      
@@ -1127,7 +1136,7 @@ def extract_cells_from_pathomics(adata,path=None):
  
 
 
-def gene_cluster_differentiation(adata,cellnames=[],sort=['Expression pattern', 'adjusted P-value', 'R-squared'],number_genes=10,cluster_names=[],font_size=14,gene_list=[]):
+def gene_cluster_differentiation(adata,cellnames=[],sort=['Expression pattern', 'adjusted P-value', 'R-squared'],number_genes=10,cluster_names=[],font_size=14,gene_list=[], path='Results_PILOT'):
     
     """
     Perform gene cluster differentiation analysis.
@@ -1146,13 +1155,16 @@ def gene_cluster_differentiation(adata,cellnames=[],sort=['Expression pattern', 
         Font size for plots, by default 12.
         gene_list=list, optional
         Your interested genes. If you have any intereted genes!
-
+    gene_list : list, optional
+        List of specific genes to analyze, by default [].
+    path : str, optional
+        Path to save the results, by default 'Results_PILOT'.
     Returns
     -------
     None.
     Performs gene cluster differentiation analysis based on specified parameters and saves the results.
     """
-    path='Results_PILOT/'
+    path= path
     start=min(adata.uns['orders']['Time_score'])
     end=max(adata.uns['orders']['Time_score'])
     if len(gene_list)==0:
@@ -1327,7 +1339,7 @@ def norm_morphological_features(path=None,column_names=[],name_cell=None):
     return data
                 
              
-def results_gene_cluster_differentiation(cluster_name=None,sort_columns=['pvalue'],ascending=[True],threshold=0.5,p_value=0.01):
+def results_gene_cluster_differentiation(cluster_name=None,sort_columns=['pvalue'],ascending=[True],threshold=0.5,p_value=0.01 ,path="Results_PILOT/"):
     """
     Retrieve and sort gene cluster statistics based on specified criteria.
 
@@ -1342,12 +1354,13 @@ def results_gene_cluster_differentiation(cluster_name=None,sort_columns=['pvalue
              Select genes with fold changes higher than the defined threshold. Default is 0.5.
         p_value: float, optional
                Select genes with the Wald test p-value less than the defined one. Default is 0.01.
-
+        path : str, optional
+            Path to the directory containing the gene cluster statistics file. Default is "Results_PILOT
     Returns:
         pandas.DataFrame
             A sorted dataframe containing gene cluster statistics based on the specified criteria.
     """
-    path='Results_PILOT/'
+    path=path
     statistics=pd.read_csv(path+'/gene_clusters_stats_extend.csv')
     df=statistics[statistics['cluster']==cluster_name]
     df['FC']=df['FC'].astype(float)

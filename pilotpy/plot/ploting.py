@@ -35,7 +35,7 @@ from ..tools.Gene_cluster_specific_functions import *
 
 
 
-def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1, clusters = 'status',label_act = False,colors=False,location_labels='center', figsize=(12,12),font_size=24,axes_line_width=1,axes_color='black',facecolor='white',point_size=100,cmap='viridis',fontsize_legend=24,alpha_trans=1,plot_titel = "Trajectory of the disease progression"):
+def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1, clusters = 'status',label_act = False,colors=False,location_labels='center', figsize=(12,12),font_size=24,axes_line_width=1,axes_color='black',facecolor='white',point_size=100,cmap='viridis',fontsize_legend=24,alpha_trans=1,plot_titel = "Trajectory of the disease progression", path='Results_PILOT/plots'):
     
     
     
@@ -85,7 +85,8 @@ def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1,
         Transparency level for data points, by default 1.
     plot_title : str, optional
         Title of the plot, by default "Trajectory of the disease progression".
-
+    path : str, optional
+        Path to save the plot, by default 'Results_PILOT/plots'.
     Returns
     -------
     None
@@ -95,7 +96,7 @@ def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1,
     EMD=adata.uns['EMD']/adata.uns['EMD'].max()
     df=adata.uns['annot']
     
-    path='Results_PILOT/plots'
+    path = path
     
     if not os.path.exists(path):
         os.makedirs(path)
@@ -148,7 +149,7 @@ def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1,
     
 
     
-def heatmaps(adata,figsize=(12,12),col_cluster=True,row_cluster=True,cmap='Blues_r',font_scale=2):
+def heatmaps(adata,figsize=(12,12),col_cluster=True,row_cluster=True,cmap='Blues_r',font_scale=2, path='Results_PILOT/plots'):
     
     """
     Plot heatmaps of cost matrix and Wasserstein distances.
@@ -168,7 +169,8 @@ def heatmaps(adata,figsize=(12,12),col_cluster=True,row_cluster=True,cmap='Blues
         Colormap for the heatmaps, by default 'Blues_r'.
     font_scale : int, optional
         Font scale for labels and annotations, by default 2.
-
+    path : str, optional
+        Path to save the plots, by default 'Results_PILOT/plots'.
     Returns
     -------
     None
@@ -177,7 +179,7 @@ def heatmaps(adata,figsize=(12,12),col_cluster=True,row_cluster=True,cmap='Blues
 
     annot=adata.uns['annot']
     cost=adata.uns['cost']
-    path='Results_PILOT/plots'
+    path = path
     
     if not os.path.exists(path):
         os.makedirs(path)
@@ -199,7 +201,7 @@ def heatmaps(adata,figsize=(12,12),col_cluster=True,row_cluster=True,cmap='Blues
  
 
  
-def heatmaps_df(df, figsize=(12, 12), col_cluster=True, row_cluster=True, cmap='Blues_r'):
+def heatmaps_df(df, figsize=(12, 12), col_cluster=True, row_cluster=True, cmap= 'Blues_r', path='Results_PILOT/plots'):
     """
     Plot heatmaps of cost matrix and Wasserstein distances.
 
@@ -215,14 +217,15 @@ def heatmaps_df(df, figsize=(12, 12), col_cluster=True, row_cluster=True, cmap='
         Whether to cluster the rows, by default True.
     cmap : str, optional
         Colormap for the heatmaps, by default 'Blues_r'.
-
+    path : str, optional
+        Path to save the plots, by default 'Results_PILOT/plots'.
     Returns
     -------
     None
         Plots and saves heatmaps based on the input DataFrame.
     """
 
-    path='Results_PILOT/plots'
+    path=path
     sns.clustermap(df,
                                 row_cluster=row_cluster,col_cluster=col_cluster,annot=False,cmap=cmap,figsize=figsize,xticklabels=True);
     plt.savefig(path+"/"+'Proportions_of_cell_types_for_samples_over_trajectory.pdf')
@@ -230,7 +233,7 @@ def heatmaps_df(df, figsize=(12, 12), col_cluster=True, row_cluster=True, cmap='
       
     
 
-def fit_pricipla_graph(adata,NumNodes=20,source_node=0,show_text=True,Do_PCA=False,figsize=(12,12),X_color='r', Node_color='k', DimToPlot=[0, 1],facecolor='white',title='Principal graph'):
+def fit_pricipla_graph(adata,NumNodes=20,source_node=0,show_text=True,Do_PCA=False,figsize=(12,12),X_color='r', Node_color='k', DimToPlot=[0, 1],facecolor='white',title='Principal graph', path='Results_PILOT/plots'):
     
     """
     Fit an Elastic Principal Graph to the data and extract pseudotime information.
@@ -259,14 +262,15 @@ def fit_pricipla_graph(adata,NumNodes=20,source_node=0,show_text=True,Do_PCA=Fal
         Background color of the figure, by default 'white'.
     title : str, optional
         Title of the plot, by default 'Principal graph'.
-
+    path : str, optional
+        Path to save the plot, by default 'Results_PILOT/plots'.
     Returns
     -------
     None
         Fits an Elastic Principal Graph, plots it, and extracts pseudotime information.
     """
     
-    path='Results_PILOT/plots'
+    path=path
     
     if not os.path.exists(path):
         os.makedirs(path)
@@ -724,7 +728,7 @@ def gene_annotation_cell_type_subgroup(cell_type: str = None,
 
 
 
-def exploring_specific_genes(cluster_name='cell_type',font_size=24,gene_list=[],fig_size=(64, 56),p_value=0.01,create_new_plot_folder=True,fc_ther=0.5):
+def exploring_specific_genes(cluster_name='cell_type',font_size=24,gene_list=[],fig_size=(64, 56),p_value=0.01,create_new_plot_folder=True,fc_ther=0.5, path='Results_PILOT/'):
     """
     Explore specific genes within a cluster to analyze their patterns in comparison to other cell types.
 
@@ -742,15 +746,20 @@ def exploring_specific_genes(cluster_name='cell_type',font_size=24,gene_list=[],
         gene_list : list
             List of specific genes to explore within the cluster.
         fig_size: tuple,optional
-              Size of the plot.
-
+              Size of the plot. Default is (64, 56).
+        p_value: float, optional
+            threshold for p-value.
+        create_new_plot_folder: bool, optional
+            whether to create a new folder to store the plots for the interested cell type.
         fc_ther: float, optional
             threshold for FC.
+        path: str, optional
+            Path to the results folder. Default is 'Results_PILOT/'.
 
     Returns:
         Show the genes for the interested cell types
     """
-    path='Results_PILOT/'
+    path=path
     file_name = "/Whole_expressions.csv"
     cluster_names = [os.path.splitext(f)[0] for f in listdir(path + '/cells/') \
                          if isfile(join(path + '/cells/', f))]
@@ -788,7 +797,7 @@ def exploring_specific_genes(cluster_name='cell_type',font_size=24,gene_list=[],
    
     
     
-def go_enrichment(df,num_gos=20,source=None,cell_type='cell_type',fontsize=32,s=200, figsize = (15,12),color = 'tab:blue',dpi=100,bbox_inches = 'tight', facecolor='white', transparent=False,organism='hsapiens'):
+def go_enrichment(df,num_gos=20,source=None,cell_type='cell_type',fontsize=32,s=200, figsize = (15,12),color = 'tab:blue',dpi=100,bbox_inches = 'tight', facecolor='white', transparent=False,organism='hsapiens', path_plt='Results_PILOT/', path_table='Results_PILOT/'):
     
     """
     Perform Gene Ontology (GO) enrichment analysis and create a scatterplot of enriched terms.
@@ -821,22 +830,24 @@ def go_enrichment(df,num_gos=20,source=None,cell_type='cell_type',fontsize=32,s=
         Whether the saved plot image has a transparent background. Default is False.
     organism : str, optional
         Organism for GO enrichment analysis. Default is 'hsapiens'.
-
+    path : str, optional
+        Path to save the results. Default is 'Results_PILOT/'.
     Returns:
     --------
     None
         Saves the scatterplot of enriched GO terms as a PDF file.
     """
 
-    path='Results_PILOT/'
+    path_plt=path_plt
+    path_table=path_table
     df_sorted =df
     gp = GProfiler(return_dataframe=True)
     gprofiler_results = gp.profile(organism = organism,
                 query = list(df_sorted['gene'].values))
     
-    if not os.path.exists(path+'GO/'+cell_type+'/'):
-        os.makedirs(path+'GO/'+cell_type+'/')
-    gprofiler_results.to_csv(path+'GO/'+cell_type+'/'+cell_type+"_all_gprofiler_results.csv")
+    if not os.path.exists(path_table+'GO/'+cell_type+'/'):
+        os.makedirs(path_table+'GO/'+cell_type+'/')
+    gprofiler_results.to_csv(path_table+'GO/'+cell_type+'/'+cell_type+"_all_gprofiler_results.csv")
     if(gprofiler_results.shape[0] < num_gos):
         num_gos = gprofiler_results.shape[0]
 
@@ -863,9 +874,9 @@ def go_enrichment(df,num_gos=20,source=None,cell_type='cell_type',fontsize=32,s=
     #if not os.path.exists(path+'GO/'):
        # os.makedirs(path+'GO/')
     #plt.savefig(path+'GO/'+cell_type+".pdf", bbox_inches = 'tight', facecolor='white', transparent=False)
-    if not os.path.exists(path+'GO/'+cell_type+'/'):
-        os.makedirs(path+'GO/'+cell_type+'/')
-    plt.savefig(path+'GO/'+cell_type+'/'+cell_type+".pdf", bbox_inches = bbox_inches, facecolor=facecolor, transparent=transparent)
+    if not os.path.exists(path_plt+'GO/'+cell_type+'/'):
+        os.makedirs(path_plt+'GO/'+cell_type+'/')
+    plt.savefig(path_plt+'GO/'+cell_type+'/'+cell_type+".pdf", bbox_inches = bbox_inches, facecolor=facecolor, transparent=transparent)
     
 def plt_gene_cluster_differentiation(cellnames=['healthy_CM','Myofib'],font_size=22,p_value=0.01,fc_ther=0.5):
     """
