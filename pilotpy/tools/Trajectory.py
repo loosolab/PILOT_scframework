@@ -1369,7 +1369,7 @@ def results_gene_cluster_differentiation(cluster_name=None,sort_columns=['pvalue
     df=df[df['pvalue'] < p_value]
     df_sorted = df.sort_values(by=sort_columns, ascending=ascending)
     
-    df_sorted.to_csv(path+'/gene_clusters_stats_extend'+cluster_name+'_filtered.csv')
+    df_sorted.to_csv(path+'/gene_clusters_stats_extend_'+cluster_name+'_filtered.csv')
     return df_sorted[['gene','cluster','waldStat','pvalue','FC','Expression pattern','fit-pvalue','fit-mod-rsquared']]  
 
 
