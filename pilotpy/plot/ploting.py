@@ -728,7 +728,7 @@ def gene_annotation_cell_type_subgroup(cell_type: str = None,
 
 
 
-def exploring_specific_genes(cluster_name='cell_type',font_size=24,gene_list=[],fig_size=(64, 56),p_value=0.01,create_new_plot_folder=True,fc_ther=0.5, path='Results_PILOT/'):
+def exploring_specific_genes(adata, cluster_name='cell_type',font_size=24,gene_list=[],fig_size=(64, 56),p_value=0.01,create_new_plot_folder=True,fc_ther=0.5, path='Results_PILOT/', axis="samples"):
     """
     Explore specific genes within a cluster to analyze their patterns in comparison to other cell types.
 
@@ -773,8 +773,12 @@ def exploring_specific_genes(cluster_name='cell_type',font_size=24,gene_list=[],
     filtered_all_stats_extend=all_stats_extend[all_stats_extend['gene'].isin(gene_list)]
     filtered_all_stats_extend=filtered_all_stats_extend[filtered_all_stats_extend['cluster'].isin([cluster_name])]
     
- 
-    plot_stats_by_pattern(cluster_names, filtered_all_stats_extend, gene_dict, pline, path, file_name,font_size=font_size,p_value=p_value,create_new_plot_folder=create_new_plot_folder,fc_ther=fc_ther)
+    real_labels = adata.uns['real_labels']
+    pseudotime= adata.uns['pseudotime']
+    labels = pd.DataFrame({'real_labels': real_labels, 'pseudotime': pseudotime})
+    labels = labels.sort_values(by = 'pseudotime')
+
+    plot_stats_by_pattern(cluster_names, filtered_all_stats_extend, gene_dict, pline, path, file_name, labels, font_size=font_size,p_value=p_value,create_new_plot_folder=create_new_plot_folder,fc_ther=fc_ther)
     
     # Load the PNG image file
     if create_new_plot_folder:
@@ -782,7 +786,7 @@ def exploring_specific_genes(cluster_name='cell_type',font_size=24,gene_list=[],
         image = imread(image_path)
     else:
         
-        image_path =path+'plots_gene_cluster_differentiation/'+cluster_name+'.png'  # Replace with the actual path to your PNG image
+        image_path =path+'plots_gene_cluster_differentiation/'+cluster_name+gene_list+'.png'  # Replace with the actual path to your PNG image
         image = imread(image_path)
     
     # Set the size of the figure
@@ -2036,7 +2040,10 @@ def plot_stats_by_pattern(cluster_names: list = None,
                           pline: list = None,
                           path_to_results: str = None,
                           file_name: str = "/Whole_expressions.csv",
-                          font_size: int = 24,p_value=0.01,create_new_plot_folder=False,fc_ther=0.5):
+                          labels: list = None,
+                          font_size: int = 24,p_value=0.01,create_new_plot_folder=False,fc_ther=0.5,
+                          axis= "samples"
+                          ):
     """
     Parameters
     ----------
@@ -2081,9 +2088,15 @@ def plot_stats_by_pattern(cluster_names: list = None,
             plt.rcParams["figure.facecolor"] = 'w'
             
                 
-            #plt.figure(figsize=(80, 80))
-            #f, axs = plt.subplots(n_row, n_col, figsize=(16, 8))
-            plt.figure(figsize=(80, 80))  # Set the overall figure size
+             # Set the overall figure size
+            if axis == "samples":
+                plt.figure(figsize=(80, 80))          
+            elif axis == "timepoints":
+                plt.figure(figsize=(4.5 * len(labels), (4.5 * len(labels))/1.5))  # Set the overall figure size
+
+            #set xaxis labels
+            if axis == "timepoints":
+                plt.xticks(ticks=range(1,(len(labels)+1)), labels=labels['real_labels'], rotation=45, ha='right')
 
             # Adjust the size of individual subplots
             subplot_width = 8  # Choose an appropriate value

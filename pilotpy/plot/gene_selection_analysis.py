@@ -811,7 +811,7 @@ def plot_gene_list_pattern(gene_list: list,
         axes = np.atleast_2d(axes)
     elif (axis == "timepoints"):
         fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), len(n_clusters), constrained_layout = True,
-                                 figsize=(6 * len(pseudotime_sample_names.sampleID.values), int(np.ceil(len(gene_list) / 3)) * len(n_clusters) * n_px / 2))
+                                 figsize=(4.5 * len(pseudotime_sample_names.sampleID.values), 4.5 * len(pseudotime_sample_names.sampleID.values) / 1.5)
         axes = np.atleast_2d(axes)
     
     for c in n_clusters:
@@ -832,7 +832,7 @@ def plot_gene_list_pattern(gene_list: list,
                 if (axis == "samples"):
                     axes[g, c].set_xticklabels(axes[g, c].get_xticks().astype(int)) 
                 elif (axis == "timepoints"):
-                    axes[g, c].set_xticks(range(len(pseudotime_sample_names.sampleID.values)), labels= pseudotime_sample_names.sampleID.values, rotation=45, ha='right')
+                    axes[g, c].set_xticks(range(1, (len(pseudotime_sample_names.sampleID.values)+1)), labels= pseudotime_sample_names.sampleID.values, rotation=45, ha='right')
 
                 axes[g, c].set_title(gene_name,
                                      size = (fontsize - 2) * len(n_clusters),
