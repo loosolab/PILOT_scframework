@@ -792,11 +792,11 @@ def exploring_specific_genes(
     labels = pd.DataFrame({'real_labels': real_labels, 'pseudotime': pseudotime})
     labels = labels.sort_values(by = 'pseudotime')
 
-    plot_stats_by_pattern(cluster_names, filtered_all_stats_extend, gene_dict, pline, path_to_tables, path_to_figures, file_name, labels, font_size=font_size,p_value=p_value,create_new_plot_folder=create_new_plot_folder,fc_ther=fc_ther, axis=axis)
+    plot_stats_by_pattern(cluster_names, filtered_all_stats_extend, gene_dict, pline, path_to_tables, path_to_figures=path_to_figures, file_name, labels, font_size=font_size,p_value=p_value,create_new_plot_folder=create_new_plot_folder,fc_ther=fc_ther, axis=axis)
     
     # Load the PNG image file
     if create_new_plot_folder:
-        image_path =path_to_figures+'/plot_genes_for_'+str(cluster_name)+'/'+list(gene_list) + ".png"  # Replace with the actual path to your PNG image
+        image_path =path_to_figures+'/plot_genes_for_'+str(cluster_name)+'/'+str(gene_list) + ".png"  # Replace with the actual path to your PNG image
         image = imread(image_path)
     else:
         
@@ -2053,7 +2053,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
                           gene_dict: dict = None,
                           pline: list = None,
                           path_to_results: str = None,
-                          path_to_figures: str = None,
+                          path_to_figures: 'Results_PILOT/plots',
                           file_name: str = "/Whole_expressions.csv",
                           labels: list = None,
                           font_size: int = 24,p_value=0.01,create_new_plot_folder=False,fc_ther=0.5,
