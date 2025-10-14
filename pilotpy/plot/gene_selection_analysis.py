@@ -731,6 +731,8 @@ def plot_gene_list_pattern(gene_list: list,
                             plot_color: str = 'tab:orange',
                             points_color: str = 'viridis',
                             fontsize = 14,
+                            path_to_figures = 'Results_PILOT/plots',
+                            path_to_tables = 'Results_PILOT/plots',
                             axis = "samples"):
     """
     
@@ -762,12 +764,14 @@ def plot_gene_list_pattern(gene_list: list,
         Plot genes pattern for specific cell type
 
     """
-    
+    path_to_figures = path_to_figures
+    path_to_tables = path_to_tables
+
     if len(gene_list) > len(set(gene_list)):
         return "The gene list is not unique!"
     
     try:
-        cells = pd.read_csv(path_to_results + "/cells/" + str(cell_type) + ".csv",
+        cells = pd.read_csv(path_to_tables + "/cells/" + str(cell_type) + ".csv",
                                 usecols = np.concatenate((np.array([sample_col, time_col]), gene_list)))
     except ValueError:
         return "Some of the genes are not exists in cell type " + str(cell_type) + "!"
@@ -779,7 +783,7 @@ def plot_gene_list_pattern(gene_list: list,
     scaled_cells[[sample_col, time_col]] = cells[[sample_col, time_col]].values
     
     try:
-        table = pd.read_csv(path_to_results + "/Markers/" + str(cell_type) + "/Whole_expressions.csv", index_col = 0)
+        table = pd.read_csv(path_to_tables + "/Markers/" + str(cell_type) + "/Whole_expressions.csv", index_col = 0)
         table.index = table['Gene ID']
         table = table.loc[gene_list]
     except KeyError:
