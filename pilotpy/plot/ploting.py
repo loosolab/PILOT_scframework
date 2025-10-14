@@ -728,7 +728,19 @@ def gene_annotation_cell_type_subgroup(cell_type: str = None,
 
 
 
-def exploring_specific_genes(adata, cluster_name='cell_type',font_size=24,gene_list=[],fig_size=(64, 56),p_value=0.01,create_new_plot_folder=True,fc_ther=0.5, path='Results_PILOT/', axis="samples"):
+def exploring_specific_genes(
+                        adata,
+                        cluster_name='cell_type',
+                        font_size=24,
+                        gene_list=[],
+                        fig_size=(64, 56),
+                        p_value=0.01,
+                        create_new_plot_folder=True,
+                        fc_ther=0.5,
+                        path_to_tables='Results_PILOT/',
+                        path_to_figures='Results_PILOT/',
+                        axis="samples"
+                        ):
     """
     Explore specific genes within a cluster to analyze their patterns in comparison to other cell types.
 
@@ -759,14 +771,16 @@ def exploring_specific_genes(adata, cluster_name='cell_type',font_size=24,gene_l
     Returns:
         Show the genes for the interested cell types
     """
-    path=path
+    path_to_tables=path_to_tables
+    path_to_figures=path_to_figures
+
     file_name = "/Whole_expressions.csv"
-    cluster_names = [os.path.splitext(f)[0] for f in listdir(path + '/cells/') \
-                         if isfile(join(path + '/cells/', f))]
+    cluster_names = [os.path.splitext(f)[0] for f in listdir(path_to_tables + 'cells/') \
+                         if isfile(join(path_to_tables + '/cells/', f))]
     
-    all_stats_extend = pd.read_csv(path + "/gene_clusters_stats_extend.csv", sep = ",")
+    all_stats_extend = pd.read_csv(path_to_tables + "/gene_clusters_stats_extend.csv", sep = ",")
     
-    with open(path + '/genes_dictionary.pkl', 'rb') as handle:
+    with open(path_to_tables + '/genes_dictionary.pkl', 'rb') as handle:
         gene_dict = pickle.load(handle)
     
     pline = np.linspace(1, 20, 20)
@@ -778,15 +792,15 @@ def exploring_specific_genes(adata, cluster_name='cell_type',font_size=24,gene_l
     labels = pd.DataFrame({'real_labels': real_labels, 'pseudotime': pseudotime})
     labels = labels.sort_values(by = 'pseudotime')
 
-    plot_stats_by_pattern(cluster_names, filtered_all_stats_extend, gene_dict, pline, path, file_name, labels, font_size=font_size,p_value=p_value,create_new_plot_folder=create_new_plot_folder,fc_ther=fc_ther)
+    plot_stats_by_pattern(cluster_names, filtered_all_stats_extend, gene_dict, pline, path_to_tables, path_to_figures, file_name, labels, font_size=font_size,p_value=p_value,create_new_plot_folder=create_new_plot_folder,fc_ther=fc_ther, axis=axis)
     
     # Load the PNG image file
     if create_new_plot_folder:
-        image_path =path+'/plot_genes_for_'+str(cluster_name)+'/'+str(cluster_name) + ".png"  # Replace with the actual path to your PNG image
+        image_path =path_to_figures+'/plot_genes_for_'+str(cluster_name)+'/'+list(gene_list) + ".png"  # Replace with the actual path to your PNG image
         image = imread(image_path)
     else:
         
-        image_path =path+'plots_gene_cluster_differentiation/'+cluster_name+gene_list+'.png'  # Replace with the actual path to your PNG image
+        image_path =path_to_figures+'plots_gene_cluster_differentiation/'+cluster_name +'.png'  # Replace with the actual path to your PNG image
         image = imread(image_path)
     
     # Set the size of the figure
@@ -2039,6 +2053,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
                           gene_dict: dict = None,
                           pline: list = None,
                           path_to_results: str = None,
+                          path_to_figures: str = None,
                           file_name: str = "/Whole_expressions.csv",
                           labels: list = None,
                           font_size: int = 24,p_value=0.01,create_new_plot_folder=False,fc_ther=0.5,
@@ -2153,17 +2168,17 @@ def plot_stats_by_pattern(cluster_names: list = None,
             plt.subplots_adjust(wspace = 0.5, hspace = 0.7)
             
             if create_new_plot_folder:
-                if not os.path.exists(path_to_results+'/plot_genes_for_'+str(cluster)+'/'):  
-                    os.makedirs(path_to_results+'/plot_genes_for_'+str(cluster)+'/')
+                if not os.path.exists(path_to_figures+'/plot_genes_for_'+str(cluster)+'/'):  
+                    os.makedirs(path_to_figures+'/plot_genes_for_'+str(cluster)+'/')
             
-                save_path = path_to_results+'/plot_genes_for_'+str(cluster)+'/'+str(cluster) + ".png"
+                save_path = path_to_figures+'/plot_genes_for_'+str(cluster)+'/'+str(cluster) + ".png"
                 plt.savefig(save_path)
                 plt.close()
             else:   
-                if not os.path.exists(path_to_results+'/plots_gene_cluster_differentiation/'):  
-                        os.makedirs(path_to_results+'/plots_gene_cluster_differentiation/')
+                if not os.path.exists(path_to_figures+'/plots_gene_cluster_differentiation/'):  
+                        os.makedirs(path_to_figures+'/plots_gene_cluster_differentiation/')
 
-                save_path = path_to_results+'/plots_gene_cluster_differentiation/'+str(cluster) + ".png"
+                save_path = path_to_figures+'/plots_gene_cluster_differentiation/'+str(cluster) + ".png"
                 plt.savefig(save_path)
                 print('Plot for '+str(cluster))
                 plt.show()
