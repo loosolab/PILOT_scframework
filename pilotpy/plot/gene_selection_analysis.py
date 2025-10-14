@@ -832,7 +832,7 @@ def plot_gene_list_pattern(gene_list: list,
                 if (axis == "samples"):
                     axes[g, c].set_xticklabels(axes[g, c].get_xticks().astype(int)) 
                 elif (axis == "timepoints"):
-                    axes[g, c].set_xticks(range(len(cells['sampleID'])), pseudotime_sample_names.sampleID.values, rotation=45, ha='right')
+                    axes[g, c].set_xticks(range(len(cells['sampleID'])), labels= pseudotime_sample_names.sampleID.values, rotation=45, ha='right')
 
                 axes[g, c].set_title(gene_name,
                                      size = (fontsize - 2) * len(n_clusters),
