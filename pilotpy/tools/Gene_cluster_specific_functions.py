@@ -618,7 +618,10 @@ def extend_stats(all_stats: pd.DataFrame = None,
         all_stats_extend.at[i,'fit-mod-rsquared'] = data[data['Gene ID'] == row['gene']]['mod_rsquared_adj'].values[0]
         # for col in col_names:
         #     all_stats_extend.at[i, 'fit-'+str(col)] = data[data['Gene ID'] == row['gene']][str(col)].values[0]
-       
+    
+    all_stats_extend['pvalue'].replace(0.0, 1e-300, inplace=True)
+    all_stats_extend['FC'].replace(0.0, 3.5, inplace=True)
+    
     all_stats_extend.to_csv(path_to_results + "/gene_clusters_stats_extend.csv", index = None)#
                    
     return all_stats_extend

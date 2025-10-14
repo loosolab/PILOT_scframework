@@ -730,7 +730,8 @@ def plot_gene_list_pattern(gene_list: list,
                             path_to_results: str = 'Results_PILOT/',
                             plot_color: str = 'tab:orange',
                             points_color: str = 'viridis',
-                            fontsize = 14):
+                            fontsize = 14,
+                            axis = "samples"):
     """
     
 
@@ -752,6 +753,8 @@ def plot_gene_list_pattern(gene_list: list,
         DESCRIPTION. The default is 'viridis'.
     fontsize : TYPE, optional
         DESCRIPTION. The default is 14.
+    axis : str, optional
+        DESCRIPTION. The default is "samples".
 
     Returns
     -------
@@ -797,10 +800,15 @@ def plot_gene_list_pattern(gene_list: list,
     n_px = 5
     n_clusters = range(3)
     
-    fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), len(n_clusters), constrained_layout = True,
-                             figsize=(len(n_clusters) * n_px * 2, int(np.ceil(len(gene_list) / 3)) * len(n_clusters) * n_px / 2))
-    axes = np.atleast_2d(axes)
     
+    if (axis == "samples"):
+        fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), len(n_clusters), constrained_layout = True,
+                                 figsize=(len(n_clusters) * n_px * 2, int(np.ceil(len(gene_list) / 3)) * len(n_clusters) * n_px / 2))
+        axes = np.atleast_2d(axes)
+    elif (axis == "timepoints"):
+        fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), len(n_clusters), constrained_layout = True,
+                                 figsize=(6 * len(cells['sampleID']), int(np.ceil(len(gene_list) / 3)) * len(n_clusters) * n_px / 2))
+        axes = np.atleast_2d(axes)
     
     for c in n_clusters:
         for g in range(int(np.ceil(len(gene_list) / 3))):
@@ -812,13 +820,16 @@ def plot_gene_list_pattern(gene_list: list,
                                    alpha = 0.5, cmap = points_color,
                                    s = 100 * len(n_clusters),
                                    norm = pltcolors.CenteredNorm(np.mean(scaled_cells[gene_name])))
-                
-                
+                 
                 axes[g, c].plot(pseudotime_sample_names.index.values,
                                 scaled_curves.loc[gene_name],
                                 c = plot_color, linewidth = 6.0)
-                axes[g, c].set_xticklabels(axes[g, c].get_xticks().astype(int))
-    
+                
+                if (axis == "samples"):
+                    axes[g, c].set_xticklabels(axes[g, c].get_xticks().astype(int)) 
+                elif (axis == "timepoints"):
+                    axes[g, c].set_xticks(range(len(cells['sampleID'])), pseudotime_sample_names.sampleID.values, rotation=45, ha='right')
+
                 axes[g, c].set_title(gene_name,
                                      size = (fontsize - 2) * len(n_clusters),
                                      weight = 'bold')
