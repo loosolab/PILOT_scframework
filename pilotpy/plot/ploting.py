@@ -2056,7 +2056,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
                           file_name: str = "/Whole_expressions.csv",
                           labels: list = None,
                           font_size: int = 24,p_value=0.01,create_new_plot_folder=False,fc_ther=0.5,
-                          path_to_figures: 'Results_PILOT/plots',
+                          path_to_figures ='Results_PILOT/plots',
                           axis= "samples"
                           ):
     """
