@@ -776,11 +776,11 @@ def exploring_specific_genes(
 
     file_name = "/Whole_expressions.csv"
     cluster_names = [os.path.splitext(f)[0] for f in listdir(path_to_tables + 'cells/') \
-                         if isfile(join(path_to_tables + '/cells/', f))]
+                         if isfile(join(path_to_tables + 'cells/', f))]
     
-    all_stats_extend = pd.read_csv(path_to_tables + "/gene_clusters_stats_extend.csv", sep = ",")
+    all_stats_extend = pd.read_csv(path_to_tables + "gene_clusters_stats_extend.csv", sep = ",")
     
-    with open(path_to_tables + '/genes_dictionary.pkl', 'rb') as handle:
+    with open(path_to_tables + 'genes_dictionary.pkl', 'rb') as handle:
         gene_dict = pickle.load(handle)
     
     pline = np.linspace(1, 20, 20)
@@ -792,14 +792,13 @@ def exploring_specific_genes(
     labels = pd.DataFrame({'real_labels': real_labels, 'pseudotime': pseudotime})
     labels = labels.sort_values(by = 'pseudotime')
 
-    plot_stats_by_pattern(cluster_names, filtered_all_stats_extend, gene_dict, pline, path_to_tables, file_name, labels, font_size=font_size,p_value=p_value,create_new_plot_folder=create_new_plot_folder,fc_ther=fc_ther, path_to_figures=path_to_figures, axis=axis)
+    plot_stats_by_pattern(cluster_names, filtered_all_stats_extend, gene_dict, pline, path_to_tables, file_name, labels, gene_list, font_size=font_size,p_value=p_value,create_new_plot_folder=create_new_plot_folder,fc_ther=fc_ther, path_to_figures=path_to_figures, axis=axis)
     
     # Load the PNG image file
     if create_new_plot_folder:
-        image_path =path_to_figures+'/plot_genes_for_'+str(cluster_name)+'/'+str(gene_list) + ".png"  # Replace with the actual path to your PNG image
+        image_path =path_to_figures+'plot_genes_for_'+str(cluster_name)+'/'+str(gene_list) + ".png"  # Replace with the actual path to your PNG image
         image = imread(image_path)
-    else:
-        
+    else:    
         image_path =path_to_figures+'plots_gene_cluster_differentiation/'+cluster_name +'.png'  # Replace with the actual path to your PNG image
         image = imread(image_path)
     
@@ -2055,8 +2054,9 @@ def plot_stats_by_pattern(cluster_names: list = None,
                           path_to_results: str = None,
                           file_name: str = "/Whole_expressions.csv",
                           labels: list = None,
+                          gene_list: list = None,
                           font_size: int = 24,p_value=0.01,create_new_plot_folder=False,fc_ther=0.5,
-                          path_to_figures ='Results_PILOT/plots',
+                          path_to_figures ='Results_PILOT/plots/',
                           axis= "samples"
                           ):
     """
@@ -2168,17 +2168,17 @@ def plot_stats_by_pattern(cluster_names: list = None,
             plt.subplots_adjust(wspace = 0.5, hspace = 0.7)
             
             if create_new_plot_folder:
-                if not os.path.exists(path_to_figures+'/plot_genes_for_'+str(cluster)+'/'):  
-                    os.makedirs(path_to_figures+'/plot_genes_for_'+str(cluster)+'/')
+                if not os.path.exists(path_to_figures+'plot_genes_for_'+str(cluster)+'/'):  
+                    os.makedirs(path_to_figures+'plot_genes_for_'+str(cluster)+'/')
             
-                save_path = path_to_figures+'/plot_genes_for_'+str(cluster)+'/'+str(cluster) + ".png"
+                save_path = path_to_figures+'plot_genes_for_'+str(cluster)+'/'+str(gene_list) + ".png"
                 plt.savefig(save_path)
                 plt.close()
             else:   
-                if not os.path.exists(path_to_figures+'/plots_gene_cluster_differentiation/'):  
-                        os.makedirs(path_to_figures+'/plots_gene_cluster_differentiation/')
+                if not os.path.exists(path_to_figures+'plots_gene_cluster_differentiation/'):  
+                        os.makedirs(path_to_figures+'plots_gene_cluster_differentiation/')
 
-                save_path = path_to_figures+'/plots_gene_cluster_differentiation/'+str(cluster) + ".png"
+                save_path = path_to_figures+'plots_gene_cluster_differentiation/'+str(cluster) + ".png"
                 plt.savefig(save_path)
                 print('Plot for '+str(cluster))
                 plt.show()
