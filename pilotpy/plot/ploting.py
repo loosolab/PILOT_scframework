@@ -2137,7 +2137,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
 
                     #set xaxis labels
                     if axis == "timepoints":
-                        axs[p, k].xticks(ticks=range(1,(len(labels)+1)), labels=labels['real_labels'], rotation=45, ha='right')
+                        axs[p, k].set_xticks(range(1,(len(labels)+1)), labels=labels['real_labels'], rotation=45, ha='right')
 
                     if(KO_x is not None):
                         axs[p, k].plot(np.linspace(min(WT_x),max(WT_x)), KO_curve,
