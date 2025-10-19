@@ -2101,13 +2101,10 @@ def plot_stats_by_pattern(cluster_names: list = None,
             n_px = 10
 
             plt.rcParams["figure.facecolor"] = 'w'
-            
-                
+               
              # Set the overall figure size
-             plt.figure(figsize=(80, 80))          
-            elif axis == "timepoints":
-                plt.figure(figsize=)  # Set the overall figure size
-
+            plt.figure(figsize=(80, 80))          
+            
             # Adjust the size of individual subplots
             subplot_width = 8  # Choose an appropriate value
             subplot_height = 6  # Choose an appropriate value
