@@ -1307,7 +1307,8 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
                                  gene_set_library: str = 'MSigDB_Hallmark_2020',
                                  cmap: str = 'coolwarm',
                                  font_size: int = 14,
-                                 path: str = 'Results_PILOT/plots/'):
+                                 path: str = 'Results_PILOT/plots/',
+                                 organism : str = 'human'):
     """
     
 
@@ -1323,6 +1324,10 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
         DESCRIPTION. The default is 'coolwarm'.
     font_size : int, optional
         DESCRIPTION. The default is 14.
+    path : str, optional
+        DESCRIPTION. The default is 'Results_PILOT/plots/'.
+    organism : str, optional
+        DESCRIPTION. The default is 'human'.
 
     Raises
     ------
@@ -1344,7 +1349,7 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
         for cluster in np.unique(curves_activities['cluster']):
             enrichr_results = gp.enrichr(gene_list = list(curves_activities[curves_activities['cluster'] == cluster].index.values), 
                                  gene_sets = gene_set_library, 
-                                 organism = "human")
+                                 organism = organism)
             data_df = enrichr_results.results[col_names]
             data_df['cluster'] = cluster
             GO_terms = pd.concat([GO_terms, data_df])

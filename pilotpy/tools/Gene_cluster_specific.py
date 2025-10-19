@@ -180,12 +180,7 @@ def infer_gene_cluster_differentiation(gene_list: list = None,
                 waldStat_score = stat.ravel()[0].real
                 waldStat_pval = stats.chi2.sf(waldStat_score, r)
                 log_fold_change = np.log2(curve1.mean()) - np.log2(curve2.mean())
-
-                if log_fold_change == 0.0:
-                    log_fold_change = 3.5
                 
-                if waldStat_pval == 0.0:
-                    waldStat_pval = 1e-300
 
                 all_stats.loc[len(all_stats)] = [str(gene_name),
                                                    str(gene_clusters[i]),

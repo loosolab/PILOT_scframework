@@ -2104,21 +2104,20 @@ def plot_stats_by_pattern(cluster_names: list = None,
             
                 
              # Set the overall figure size
-            if axis == "samples":
-                plt.figure(figsize=(80, 80))          
+             plt.figure(figsize=(80, 80))          
             elif axis == "timepoints":
-                plt.figure(figsize=(4.5 * len(labels), (4.5 * len(labels))/1.5))  # Set the overall figure size
-
-            #set xaxis labels
-            if axis == "timepoints":
-                plt.xticks(ticks=range(1,(len(labels)+1)), labels=labels['real_labels'], rotation=45, ha='right')
+                plt.figure(figsize=)  # Set the overall figure size
 
             # Adjust the size of individual subplots
             subplot_width = 8  # Choose an appropriate value
             subplot_height = 6  # Choose an appropriate value
 
-            f, axs = plt.subplots(n_row, n_col, figsize=(n_col * subplot_width, n_row * subplot_height))
-            axs = np.atleast_2d(axs)
+            if axis == "samples":
+               f, axs = plt.subplots(n_row, n_col, figsize=(n_col * subplot_width, n_row * subplot_height))
+               axs = np.atleast_2d(axs)
+            if axis == "timepoints":
+               f, axs = plt.subplots(n_row, n_col, figsize=(4.5 * len(labels), (4.5 * len(labels))/1.5))
+               axs = np.atleast_2d(axs)
            
           
 
@@ -2138,6 +2137,10 @@ def plot_stats_by_pattern(cluster_names: list = None,
                               norm = colors.CenteredNorm(np.mean(WT_tf)))
 
                     axs[p, k].axis(xmin = min(WT_x), xmax = max(WT_x))
+
+                    #set xaxis labels
+                    if axis == "timepoints":
+                    axs[p, k].xticks(ticks=range(1,(len(labels)+1)), labels=labels['real_labels'], rotation=45, ha='right')
 
                     if(KO_x is not None):
                         axs[p, k].plot(np.linspace(min(WT_x),max(WT_x)), KO_curve,

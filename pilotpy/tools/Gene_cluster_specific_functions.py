@@ -769,7 +769,7 @@ def get_two_tables(gene_name: str = None,
 
     """
     
-    WT_adata = load_data(path_to_results + '/cells/', str(cluster_n), [gene_name, 'Time_score'])
+    WT_adata = load_data(path_to_results + 'cells/', str(cluster_n), [gene_name, 'Time_score'])
     WT_adata = WT_adata.sort_values('Time_score', ignore_index=True)
     gene_clusters = gene_dict[gene_name]
     
@@ -777,13 +777,13 @@ def get_two_tables(gene_name: str = None,
     RNA_data_list = []
     for gc in gene_clusters:
         if( gc != cluster_n):
-            data = load_data(path_to_results + '/cells/', str(gc), [gene_name, 'Time_score', 'sampleID'])
+            data = load_data(path_to_results + 'cells/', str(gc), [gene_name, 'Time_score', 'sampleID'])
             data = data.sort_values('Time_score', ignore_index=True)
             data_group = data.groupby('Time_score').sample(n = min(data.groupby('Time_score').count()['sampleID']))
             RNA_target_clusters_mean.extend(list(np.transpose(data_group).loc[gene_name]))
             RNA_data_list.extend(data_group['Time_score'].values)
     
-    table1 = pd.read_csv(path_to_results + '/Markers/' + str(cluster_n) + file_name, index_col = 0)
+    table1 = pd.read_csv(path_to_results + 'Markers/' + str(cluster_n) + file_name, index_col = 0)
     
     if(len(gene_clusters) == 1):
         WT_x, WT_tf, WT_curve, KO_x, KO_tf, KO_curve = get_coordinates(WT_adata, WT_table = table1, feature_name = gene_name)
@@ -792,7 +792,7 @@ def get_two_tables(gene_name: str = None,
         RNA_target_clusters = pd.DataFrame(columns=list(range(len(pline))))
         for gc in gene_clusters:
             if( gc != cluster_n):             
-                table2 = pd.read_csv(path_to_results + '/Markers/' + str(gc) + file_name, index_col = 0)
+                table2 = pd.read_csv(path_to_results + 'Markers/' + str(gc) + file_name, index_col = 0)
                 func_type = table2[table2['Gene ID'] == gene_name]['Fitted function'].values[0]
                 polyline = generate_feature(func_type, pline)
                 new_polyline = np.append(np.ones((len(polyline),1)), polyline, axis=1)
