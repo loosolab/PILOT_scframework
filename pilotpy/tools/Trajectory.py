@@ -6,6 +6,7 @@ import seaborn as sns
 import scipy
 import matplotlib.pyplot as plt
 import pydiffmap
+import magic
 from sklearn import metrics
 from pydiffmap import diffusion_map
 from sklearn.neighbors import NearestCentroid
@@ -31,6 +32,31 @@ from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.patches import Patch
 warnings.filterwarnings('ignore')
 
+
+def magic_impute_data(adata,knn=5,knn_max = 3 * knn, decay=1, t=3):
+    """
+    Impute missing values in the data using MAGIC algorithm.
+
+    Parameters
+    ----------
+    adata : AnnData
+        Annotated data matrix containing gene expression data.
+    knn : int, optional
+        Number of nearest neighbors for MAGIC, by default 5.
+    t : int, optional
+        Diffusion time for MAGIC, by default 3.
+    genes : list, optional
+        List of gene names to impute, by default None (impute all genes).
+
+    Returns
+    -------
+    AnnData
+        Annotated data matrix with imputed gene expression data.
+    """
+    magic_operator = magic.MAGIC(knn=knn, knn_max=knn_max, decay=decay, t=t)
+    adata = magic_operator.fit_transform(adata, genes='all_genes')
+   
+    return adata
 
 
 def wasserstein_distance(adata,emb_matrix='X_PCA',
@@ -81,16 +107,16 @@ clusters_col='cell_types',sample_col='sampleID',status='status',
     
     if data_type=='scRNA':
         data,annot=extract_data_anno_scRNA_from_h5ad(adata,emb_matrix=emb_matrix,
-clusters_col=clusters_col,sample_col=sample_col,status=status)
+        clusters_col=clusters_col,sample_col=sample_col,status=status)
     else:
-         data,annot=extract_data_anno_pathomics_from_h5ad(adata,var_names=list(adata.var_names),clusters_col=clusters_col,sample_col=sample_col,status=status)
+        data,annot=extract_data_anno_pathomics_from_h5ad(adata,var_names=list(adata.var_names),clusters_col=clusters_col,sample_col=sample_col,status=status)
            
         
-       
+    #Preprocessing with magic-impute   
+    adata= magic_impute_data(adata,knn=5,t=3,genes=None)
         
-        
-    adata.uns['data'] =data
-    adata.uns['annot'] =annot
+    adata.uns['data'] = data
+    adata.uns['annot'] = annot
     proportions = Cluster_Representations(annot,regulizer=regulizer,
     normalization=normalization)
     adata.uns['proportions'] = proportions
