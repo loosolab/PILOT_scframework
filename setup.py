@@ -27,8 +27,7 @@ setup(
             "elpigraph-python",
             "adjusttext",
             "gprofiler-official",
-            "gseapy",
-            "magic-impute",
+            "gseapy"
         ],
         packages=find_packages()
 )
