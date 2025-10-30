@@ -108,7 +108,7 @@ def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1,
     colors = cmap(values)
     custom_cycler = (cycler(color=colors))
     
-    plot_titel = plot_titel
+    plot_title = plot_title
 
    
     mydmap = diffusion_map.DiffusionMap.from_sklearn(n_evecs = n_evecs, epsilon =epsilon, alpha = alpha, k=knn)
