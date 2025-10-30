@@ -139,8 +139,8 @@ def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1,
                 k=k+1
 
     ax.legend(loc=location_labels, fontsize=fontsize_legend)
-    plt.title(plot_titel)
-    plt.savefig(path+"/"+plot_titel+'.pdf')
+    plt.title(plot_title)
+    plt.savefig(path+"/"+plot_title+'.pdf')
     plt.show()         
     plt.close(fig)
     
