@@ -84,10 +84,7 @@ clusters_col='cell_types',sample_col='sampleID',status='status',
         clusters_col=clusters_col,sample_col=sample_col,status=status)
     else:
         data,annot=extract_data_anno_pathomics_from_h5ad(adata,var_names=list(adata.var_names),clusters_col=clusters_col,sample_col=sample_col,status=status)
-           
-        
-    #Preprocessing with magic-impute   
-    adata= magic_impute_data(adata,knn=5,t=3,genes=None)
+    
         
     adata.uns['data'] = data
     adata.uns['annot'] = annot

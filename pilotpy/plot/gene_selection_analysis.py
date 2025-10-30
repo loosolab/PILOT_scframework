@@ -202,13 +202,16 @@ def cluster_genes_curves(curves: pd.DataFrame = None,
 
     return pd.DataFrame({'Gene ID': curves.index, 'cluster': clusters})
 
+
 def plot_heatmap_curves(curves: pd.DataFrame = None,
                         genes_clusters: pd.DataFrame = None,
+                        cell_type: str = None,
                         cluster_method: str = 'complete',
                         cluster_metric: str = 'correlation',
                         cmap_color: str = 'RdBu_r',
                         figsize: tuple = (7, 9),
-                        fontsize: int = 14
+                        fontsize: int = 14,
+                        path_to_figures: str = 'Results_PILOT/plots/'
                         ):
     """
     
@@ -274,11 +277,16 @@ def plot_heatmap_curves(curves: pd.DataFrame = None,
     g.ax_heatmap.tick_params(axis='y', labelsize = fontsize)
     g.ax_cbar.tick_params(labelsize = fontsize)
     g.ax_row_colors.tick_params(labelsize = fontsize + 2)
-    
+
+    g.savefig(path_to_figures+"genes_selection_analysis/"+cell_type+"/"+"heatmap_culstered.pdf")
+
+
 def plot_each_cluster_activities(curves: pd.DataFrame = None,
                                  genes_clusters: pd.DataFrame = None,
+                                 cell_type: str = None,
                                  pseudotime_sample_names: pd.DataFrame = None,
-                                 fontsize: int = 14
+                                 fontsize: int = 14,
+                                 path_to_figures: str = 'Results_PILOT/plots/'
                                 ):
     """
     
@@ -289,10 +297,14 @@ def plot_each_cluster_activities(curves: pd.DataFrame = None,
         DESCRIPTION. The default is None.
     genes_clusters : pd.DataFrame, optional
         DESCRIPTION. The default is None.
+    cell_type : str, optional
+        DESCRIPTION. The default is None.
     pseudotime_sample_names : pd.DataFrame, optional
         DESCRIPTION. The default is None.
     fontsize : int, optional
         DESCRIPTION. The default is 14.
+    path_to_figures : str, optional
+        DESCRIPTION. The default is 'Results_PILOT/plots/'.
 
     Returns
     -------
@@ -347,6 +359,7 @@ def plot_each_cluster_activities(curves: pd.DataFrame = None,
         ax.set_xlabel('disease progression', fontsize = fontsize)
         j += 1
     
+    plt.savefig(path_to_figures+'genes_selection_analysis/'+cell_type+'/'+'clusters_activities.pdf')
     plt.show()
     
 def adjust_p_values(p_values):
@@ -415,7 +428,10 @@ def compute_curves_activities(curves: pd.DataFrame = None,
     return curves_activities
 
 def plot_rank_genes_cluster(curves_activities: pd.DataFrame = None,
-                            fontsize: int = 12):
+                            fontsize: int = 12, 
+                            cell_type: str = None,
+                            path_to_figures: str = 'Results_PILOT/plots/'
+                            ):
     """
     
 
@@ -425,6 +441,10 @@ def plot_rank_genes_cluster(curves_activities: pd.DataFrame = None,
         DESCRIPTION. The default is None.
     fontsize : int, optional
         DESCRIPTION. The default is 12.
+    cell_type : str, optional
+        DESCRIPTION. The default is None.
+    path_to_figures : str, optional
+        DESCRIPTION. The default is 'Results_PILOT/plots/'.
 
     Returns
     -------
@@ -483,7 +503,9 @@ def plot_rank_genes_cluster(curves_activities: pd.DataFrame = None,
         ax.set_title('cluster ' + str(ticker), fontsize = fontsize)
         j += 1
     
+    plt.savefig(path_to_figures+'genes_selection_analysis/'+cell_type+'/'+'rank_genes_clusters.pdf')
     plt.show()
+
     return rank_genes
     
 
@@ -495,7 +517,9 @@ def gene_annotation_cell_type_genes(cell_type: str = None,
                                     fig_w: int = 4,
                                     font_size: int = 16,
                                     max_length:int = 50,
-                                    sources: list = ['GO:CC', 'GO:PB', 'GO:MF']
+                                    sources: list = ['GO:CC', 'GO:PB', 'GO:MF'],
+                                    organism: str = 'hsapiens',
+                                    path_to_figures: str = 'Results_PILOT/plots/'
                                     ):
     """
     
@@ -519,6 +543,8 @@ def gene_annotation_cell_type_genes(cell_type: str = None,
         DESCRIPTION. The default is 50.
     sources : list, optional
         DESCRIPTION. The default is ['GO:CC', 'GO:PB', 'GO:MF'].
+    path_to_figures : str, optional
+        DESCRIPTION. The default is 'Results_PILOT/plots/'.
 
     Returns
     -------
@@ -527,10 +553,10 @@ def gene_annotation_cell_type_genes(cell_type: str = None,
 
     """
 
-    gp = GProfiler(return_dataframe = True)
+    gp = GProfiler(return_dataframe=True)
     if list(genes):
-        gprofiler_results = gp.profile(organism = 'hsapiens', sources = sources,
-                                       query = list(genes), no_evidences = False)
+        gprofiler_results = gp.profile(organism=organism, sources=sources,
+                                       query=list(genes), no_evidences=False)
     else:
         return "Genes list is empty!"
     
@@ -564,6 +590,7 @@ def gene_annotation_cell_type_genes(cell_type: str = None,
 
     plt.ylabel("GO Terms", size = font_size)
     plt.xlabel("-$log_{10}$ (P-value)", size = font_size)
+    plt.savefig(path_to_figures+ 'genes_selection_analysis/' + cell_type + '/' + 'GO_enrichment_' + str(group) + '.pdf')
     plt.show()
     
     return all_gprofiler_results
@@ -575,8 +602,11 @@ def annotation_cluster_genes_by_curves(curves_activities: pd.DataFrame = None,
                                        fig_w: int = 4,
                                        max_length: int = 50,
                                        sources: list = ['GO:CC', 'GO:PB', 'GO:MF'],
+                                       fontsize: int = 14,
+                                       organism: str = 'hsapiens',
+                                       path_to_figures: str = 'Results_PILOT/plots/',
                                        path_to_results: str = 'Results_PILOT/',
-                                       fontsize: int = 14):
+                                       ):
     """
     
 
@@ -596,10 +626,12 @@ def annotation_cluster_genes_by_curves(curves_activities: pd.DataFrame = None,
         DESCRIPTION. The default is 50.
     sources : list, optional
         DESCRIPTION. The default is ['GO:CC', 'GO:PB', 'GO:MF'].
-    path_to_results : str, optional
-        DESCRIPTION. The default is 'Results_PILOT/'.
     fontsize : int, optional
         DESCRIPTION. The default is 14.
+    path_to_figures : str, optional
+        DESCRIPTION. The default is 'Results_PILOT/plots/'.
+    path_to_results : str, optional
+        DESCRIPTION. The default is 'Results_PILOT/'.
 
     Returns
     -------
@@ -612,7 +644,7 @@ def annotation_cluster_genes_by_curves(curves_activities: pd.DataFrame = None,
         gprofiler_results = gene_annotation_cell_type_genes(cell_type, genes, "cluster " + str(c),
                                                             num_gos, fig_h, fig_w,
                                                             fontsize, max_length,
-                                                            sources)
+                                                            sources, organism, path_to_figures)
         
         if type(gprofiler_results) != str:
             save_path = path_to_results + "/Markers/" + str(cell_type) + "/GOs/"
@@ -631,7 +663,9 @@ def  plot_top_genes_patterns(rank_genes: pd.DataFrame,
                              path_to_results: str = 'Results_PILOT/',
                              plot_color: str = 'tab:orange',
                              points_color: str = 'viridis',
-                             fontsize: str = 14):
+                             fontsize: str = 14,
+                             path_to_figures: str = 'Results_PILOT/plots/'
+                             ):
     """
     
 
@@ -657,6 +691,8 @@ def  plot_top_genes_patterns(rank_genes: pd.DataFrame,
         DESCRIPTION. The default is 'viridis'.
     fontsize : TYPE, optional
         DESCRIPTION. The default is 14.
+    path_to_figures : str, optional
+        DESCRIPTION. The default is 'Results_PILOT/plots/'.
 
     Returns
     -------
@@ -721,6 +757,7 @@ def  plot_top_genes_patterns(rank_genes: pd.DataFrame,
             else:
                 axes[g, c - 1].set_axis_off()
     
+    plt.savefig(path_to_figures + 'genes_selection_analysis/' + cell_type + '/' + 'top_genes_patterns.pdf')
     plt.show()
   
 def plot_gene_list_pattern(gene_list: list,
@@ -880,7 +917,9 @@ def genes_selection_analysis(
         max_length: int = 50,
         sources: list = ['GO:CC', 'GO:PB', 'GO:MF'],
         fontsize: int = 14,
-        path_to_results: str = 'Results_PILOT/'
+        organism: str = 'hsapiens',
+        path_to_tables: str = 'Results_PILOT/',
+        path_to_figures: str = 'Results_PILOT/plots/'
     ):
     """
     
@@ -921,7 +960,9 @@ def genes_selection_analysis(
         DESCRIPTION. The default is ['GO:CC', 'GO:PB', 'GO:MF'].
     fontsize : int, optional
         DESCRIPTION. The default is 14.
-    path_to_results : str, optional
+    path_to_tables : str, optional
+        DESCRIPTION. The default is 'Results_PILOT/'.
+    path_to_figures : str, optional
         DESCRIPTION. The default is 'Results_PILOT/'.
 
     Returns
@@ -936,7 +977,7 @@ def genes_selection_analysis(
                                                                        filter_table_feature_pval,
                                                                        table_filter_thr,
                                                                        table_filter_pval_thr,
-                                                                       path_to_results)
+                                                                       path_to_results=path_to_tables)
 
     print("Cluster genes using hierarchical clustering... ")
     genes_clusters = cluster_genes_curves(noised_curves,
@@ -945,9 +986,9 @@ def genes_selection_analysis(
                                           scaler_value)
 
     print("Plot the heatmap of genes clustered... ")
-    plot_heatmap_curves(noised_curves, genes_clusters,
+    plot_heatmap_curves(noised_curves, genes_clusters, cell_type,
                         cluster_method, cluster_metric,
-                        cmap_color, figsize, fontsize)
+                        cmap_color, figsize, fontsize, path_to_figures)
 
     print("Plot patterns of clusters... ")
     print("Compute curves activities... ")
@@ -955,19 +996,19 @@ def genes_selection_analysis(
     print("Plot top 10 genes for each cluster")
     print("Plot GO analysis for each cluster")
     
-    plot_each_cluster_activities(noised_curves, genes_clusters,
-                                 pseudotime_sample_names)
+    plot_each_cluster_activities(noised_curves, genes_clusters, cell_type,
+                                 pseudotime_sample_names, path_to_figures)
     curves_activities = compute_curves_activities(noised_curves, genes_clusters,
                                                   pseudotime_sample_names,
-                                                  cell_type, path_to_results)
-    rank_genes = plot_rank_genes_cluster(curves_activities, fontsize)
+                                                  cell_type, path_to_results= path_to_tables)
+    rank_genes = plot_rank_genes_cluster(curves_activities, fontsize, cell_type, path_to_figures)
     
     plot_top_genes_patterns(rank_genes, pseudotime_sample_names, cell_type, curves,
-                            path_to_results = path_to_results, fontsize = fontsize)
+                            path_to_results= path_to_tables, fontsize = fontsize, path_to_figures= path_to_figures)
     
     annotation_cluster_genes_by_curves(curves_activities, cell_type, num_gos,
-                                       fig_h, fig_w, max_length, sources,
-                                       path_to_results, fontsize)
+                                       fig_h, fig_w, max_length, sources, fontsize, organism, path_to_figures,
+                                       path_to_results= path_to_tables)
 
 def genes_selection_heatmap(
         adata: ad.AnnData,
