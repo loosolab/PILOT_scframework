@@ -1000,7 +1000,7 @@ def genes_selection_analysis(
     print("Plot GO analysis for each cluster")
     
     plot_each_cluster_activities(noised_curves, genes_clusters, cell_type,
-                                 pseudotime_sample_names, path_to_figures)
+                                 pseudotime_sample_names, fontsize, path_to_figures)
     curves_activities = compute_curves_activities(noised_curves, genes_clusters,
                                                   pseudotime_sample_names,
                                                   cell_type, path_to_results= path_to_tables)
