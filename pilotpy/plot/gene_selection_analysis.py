@@ -277,6 +277,9 @@ def plot_heatmap_curves(curves: pd.DataFrame = None,
     g.ax_heatmap.tick_params(axis='y', labelsize = fontsize)
     g.ax_cbar.tick_params(labelsize = fontsize)
     g.ax_row_colors.tick_params(labelsize = fontsize + 2)
+    
+    if not os.path.exists(path_to_figures+"genes_selection_analysis/"+cell_type+"/"):
+        os.makedirs(path_to_figures+"genes_selection_analysis/"+cell_type+"/")
 
     g.savefig(path_to_figures+"genes_selection_analysis/"+cell_type+"/"+"heatmap_culstered.pdf")
 
