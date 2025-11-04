@@ -803,11 +803,12 @@ def exploring_specific_genes(
         image = imread(image_path)
     
     # Set the size of the figure
-    fig, ax = plt.subplots(figsize=fig_size)  # Adjust the width and height as needed
-
+    fig, ax = plt.subplots(int(np.ceil(len(gene_list) / 3)), len(n_clusters), constrained_layout = True,
+                figsize=(4.5 * len(real_labels), 4.5 * len(real_labels) / 4 * int(np.ceil(len(gene_list) / 3))))  # Adjust the width and height as needed
+    
     # Display the PNG image
     ax.imshow(image)
-    #ax.set_xticks()
+    # ax.set_xticks()
     ax.axis('off')  # Turn off axis labels and ticks
     plt.show()
     
@@ -1003,7 +1004,7 @@ def plot_best_matches_cell_types(target, data,df,sorted_best, scale_name, min_ta
             plt.figure(figsize=((width, height)))
     elif (axis == "timepoints"):
             width = 6* len(df['sampleID'])
-            height = 8* len(sorted_best) 
+            height = 4* len(sorted_best) 
             plt.figure(figsize=((width, height)))
     
     plt.subplots_adjust(wspace = 0.5, hspace = 1 )

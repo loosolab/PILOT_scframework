@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+import ipywidgets as widgets
 
 import anndata as ad
 from sklearn.preprocessing import StandardScaler
@@ -316,7 +317,7 @@ def plot_each_cluster_activities(curves: pd.DataFrame = None,
     """
     
     n_clusters = np.unique(genes_clusters['cluster'])
-    fig, axs = plt.subplots(nrows = 1, ncols = len(n_clusters), figsize = (len(n_clusters) * 3, 2))
+    fig, axs = plt.subplots(nrows = 1, ncols = len(n_clusters), figsize = (len(n_clusters) * 3, 4))
     plt.subplots_adjust(hspace = 0.5)
 
     j = 0
@@ -462,7 +463,7 @@ def plot_rank_genes_cluster(curves_activities: pd.DataFrame = None,
     n_clusters = np.unique(clusters)
     
     tickers = list(n_clusters)
-    fig, axs = plt.subplots(nrows = 1, ncols = len(n_clusters), figsize = (len(n_clusters) * 3, 2))
+    fig, axs = plt.subplots(nrows = 1, ncols = len(n_clusters), figsize = (len(n_clusters) * 3, 4))
     plt.subplots_adjust(hspace = 0.5)
 
     if len(n_clusters) == 1:
@@ -767,7 +768,6 @@ def plot_gene_list_pattern(gene_list: list,
                             cell_type: str,
                             sample_col: str = 'sampleID',
                             time_col: str = 'Time_score',
-                            path_to_results: str = 'Results_PILOT/',
                             plot_color: str = 'tab:orange',
                             points_color: str = 'viridis',
                             fontsize = 14,
@@ -787,8 +787,6 @@ def plot_gene_list_pattern(gene_list: list,
         DESCRIPTION. The default is 'sampleID'.
     time_col : str, optional
         DESCRIPTION. The default is 'Time_score'.
-    path_to_results : str, optional
-        DESCRIPTION. The default is 'Results_PILOT/'.
     plot_color : str, optional
         DESCRIPTION. The default is 'tab:orange'.
     points_color : str, optional
@@ -797,6 +795,10 @@ def plot_gene_list_pattern(gene_list: list,
         DESCRIPTION. The default is 14.
     axis : str, optional
         DESCRIPTION. The default is "samples".
+    path_to_figures : str, optional
+        DESCRIPTION. The default is 'Results_PILOT/plots'.
+    path_to_tables : str, optional
+        DESCRIPTION. The default is 'Results_PILOT/plots'.
 
     Returns
     -------
@@ -851,7 +853,7 @@ def plot_gene_list_pattern(gene_list: list,
         axes = np.atleast_2d(axes)
     elif (axis == "timepoints"):
         fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), len(n_clusters), constrained_layout = True,
-                                 figsize=(4.5 * len(pseudotime_sample_names.sampleID.values), 4.5 * len(pseudotime_sample_names.sampleID.values) / 4))
+                                 figsize=(4.5 * len(pseudotime_sample_names.sampleID.values), 4.5 * len(pseudotime_sample_names.sampleID.values) / 4 * int(np.ceil(len(gene_list) / 3)))
         axes = np.atleast_2d(axes)
     
     for c in n_clusters:
@@ -993,6 +995,7 @@ def genes_selection_analysis(
                         cluster_method, cluster_metric,
                         cmap_color, figsize, fontsize, path_to_figures)
 
+
     print("Plot patterns of clusters... ")
     print("Compute curves activities... ")
     print("Save curves activities... ")
@@ -1012,6 +1015,43 @@ def genes_selection_analysis(
     annotation_cluster_genes_by_curves(curves_activities, cell_type, num_gos,
                                        fig_h, fig_w, max_length, sources, fontsize, organism, path_to_figures,
                                        path_to_results= path_to_tables)
+    
+
+    clusters = np.unique(genes_clusters['cluster'])
+    outputs = []
+    
+    for idx in range(len(clusters)+1):
+        out = widgets.Output()
+        with out:
+            start = 1+idx
+            # Cluster pattern-plot
+            plt.figure(start)
+            plt.show()
+
+            # plot top_genes
+            plt.figure(start+len(clusters))
+            plt.show()
+            
+            # Top_genes pattern-plot
+            num_plots = len(rank_genes[rank_genes['cluster'] == clusters[idx-1]])
+            
+            j = 0
+            for g in range(num_plots+1):
+                if j == 0:
+                    plt.figure(start+2*len(clusters)+g)
+                    plt.show()
+                else:
+                    plt.figure(start+2*len(clusters)+j+g)
+                    plt.show()
+                j += num_plots
+                
+        outputs.append(out)
+
+    tab = widgets.Tab(children=outputs)
+    for i, title in enumerate(clusters):
+        tab.set_title(i, str(title))
+
+    return tab 
 
 def genes_selection_heatmap(
         adata: ad.AnnData,
@@ -1027,6 +1067,7 @@ def genes_selection_heatmap(
         figsize: tuple = (7, 9),
         fontsize: int = 14,
         path_to_results: str = 'Results_PILOT/'
+        path_to_figures: str = 'Results_PILOT/plots/'
     ):
     """
     
@@ -1087,9 +1128,13 @@ def genes_selection_heatmap(
                               cell_type, path_to_results)
 
     print("Plot the heatmap of genes clustered... ")
-    plot_heatmap_curves(noised_curves, genes_clusters,
+    plot_heatmap_curves(noised_curves, genes_clusters, cell_type,
                         cluster_method, cluster_metric,
-                        cmap_color, figsize, fontsize)
+                        cmap_color, figsize, fontsize, path_to_figures)
+    
+    print("Plot patterns of clusters... ")
+    plot_each_cluster_activities(noised_curves, genes_clusters, cell_type,
+                                 pseudotime_sample_names, fontsize, path_to_figures)
     
     adata.uns['gene_selection_heatmap'] = {'cell_type': cell_type,
                                            'curves': curves,
