@@ -1066,7 +1066,7 @@ def genes_selection_heatmap(
         cmap_color: str = 'RdBu_r',
         figsize: tuple = (7, 9),
         fontsize: int = 14,
-        path_to_results: str = 'Results_PILOT/'
+        path_to_results: str = 'Results_PILOT/',
         path_to_figures: str = 'Results_PILOT/plots/'
     ):
     """
