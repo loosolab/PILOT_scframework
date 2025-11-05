@@ -277,11 +277,11 @@ def plot_heatmap_curves(curves: pd.DataFrame = None,
 
     g.ax_heatmap.tick_params(axis='x', labelsize = fontsize)
     
-    if clusters_numbers['cluster'] < 10:
+    if len(clusters_numbers['cluster']) < 10:
         g.ax_heatmap.tick_params(axis='y', labelsize = fontsize)
     else:
         g.ax_heatmap.tick_params(axis='y', labelsize = fontsize - 2)
-        
+
     g.ax_cbar.tick_params(labelsize = fontsize)
     g.ax_row_colors.tick_params(labelsize = fontsize + 2)
     
@@ -859,9 +859,8 @@ def plot_gene_list_pattern(gene_list: list,
         axes = np.atleast_2d(axes)
     elif (axis == "timepoints"):
         fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), len(n_clusters), constrained_layout = True,
-                                 figsize=(4.5 * len(pseudotime_sample_names.sampleID.values), 5 * len(pseudotime_sample_names.sampleID.values) / 4 * int(np.ceil(len(gene_list) / 3))))
+                                 figsize=(4.5 * len(pseudotime_sample_names.sampleID.values), 4.5 * len(pseudotime_sample_names.sampleID.values) / 4 * int(np.ceil(len(gene_list) / 3))))
         axes = np.atleast_2d(axes)
-    plt.subplots_adjust(hspace= 0.5)
 
     for c in n_clusters:
         for g in range(int(np.ceil(len(gene_list) / 3))):
@@ -909,7 +908,9 @@ def plot_gene_list_pattern(gene_list: list,
             else:
                 axes[g, c].set_axis_off()
     
-    plt.show()  
+    plt.subplot_adjust(hspace= 0.5)
+    plt.show() 
+
   
 def genes_selection_analysis(
         adata: ad.AnnData,
