@@ -274,8 +274,14 @@ def plot_heatmap_curves(curves: pd.DataFrame = None,
 
     g.ax_heatmap.set_ylabel("")
     g.ax_heatmap.set_xlabel("Samples", fontsize = fontsize + 2)
+
     g.ax_heatmap.tick_params(axis='x', labelsize = fontsize)
-    g.ax_heatmap.tick_params(axis='y', labelsize = fontsize)
+    
+    if clusters_numbers['cluster'] < 10:
+        g.ax_heatmap.tick_params(axis='y', labelsize = fontsize)
+    else:
+        g.ax_heatmap.tick_params(axis='y', labelsize = fontsize - 2)
+        
     g.ax_cbar.tick_params(labelsize = fontsize)
     g.ax_row_colors.tick_params(labelsize = fontsize + 2)
     
@@ -317,8 +323,8 @@ def plot_each_cluster_activities(curves: pd.DataFrame = None,
     """
     
     n_clusters = np.unique(genes_clusters['cluster'])
-    fig, axs = plt.subplots(nrows = 1, ncols = len(n_clusters), figsize = (len(n_clusters) * 3, 4))
-    plt.subplots_adjust(hspace = 0.5)
+    fig, axs = plt.subplots(nrows= 1, ncols= len(n_clusters), constrained_layout= True, figsize= (len(n_clusters) * 4, 4))
+    plt.subplots_adjust(hspace= 0.5)
 
     j = 0
     tickers = list(n_clusters)
@@ -463,7 +469,7 @@ def plot_rank_genes_cluster(curves_activities: pd.DataFrame = None,
     n_clusters = np.unique(clusters)
     
     tickers = list(n_clusters)
-    fig, axs = plt.subplots(nrows = 1, ncols = len(n_clusters), figsize = (len(n_clusters) * 3, 4))
+    fig, axs = plt.subplots(nrows = 1, ncols = len(n_clusters), constrained_layout= True, figsize = (len(n_clusters) * 4, 4))
     plt.subplots_adjust(hspace = 0.5)
 
     if len(n_clusters) == 1:
@@ -848,14 +854,15 @@ def plot_gene_list_pattern(gene_list: list,
     
     
     if (axis == "samples"):
-        fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), len(n_clusters), constrained_layout = True,
+        fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), len(n_clusters), constrained_layout= True,
                                  figsize=(len(n_clusters) * n_px * 2, int(np.ceil(len(gene_list) / 3)) * len(n_clusters) * n_px / 2))
         axes = np.atleast_2d(axes)
     elif (axis == "timepoints"):
         fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), len(n_clusters), constrained_layout = True,
-                                 figsize=(4.5 * len(pseudotime_sample_names.sampleID.values), 4.5 * len(pseudotime_sample_names.sampleID.values) / 4 * int(np.ceil(len(gene_list) / 3))))
+                                 figsize=(4.5 * len(pseudotime_sample_names.sampleID.values), 5 * len(pseudotime_sample_names.sampleID.values) / 4 * int(np.ceil(len(gene_list) / 3))))
         axes = np.atleast_2d(axes)
-    
+    plt.subplots_adjust(hspace= 0.5)
+
     for c in n_clusters:
         for g in range(int(np.ceil(len(gene_list) / 3))):
             if (g * len(n_clusters) + c) < len(gene_list):

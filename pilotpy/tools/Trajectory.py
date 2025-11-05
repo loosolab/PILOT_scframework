@@ -765,6 +765,8 @@ def cell_importance(adata,
                                  max_iter_huber = 1, epsilon_huber = 1,
                                  pval_thr = p_val, modify_r2 = False)
     
+    plt.subplots_adjust(hspace=0.5)
+
     if save_as_pdf:
         suffix = 'Cell_types_importance.pdf'
     else:

@@ -24,6 +24,7 @@ import sys
 from genericpath import isfile
 from matplotlib.image import imread
 import warnings
+from warnings import warn
 import ot
 from logging import info, warn
 from cycler import cycler
@@ -93,6 +94,9 @@ def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1,
         Visualizes and saves the trajectory plot.
     """
     
+    if len(adata.uns['real_labels']) < 5:
+        raise Exception("Warning: The number of samples is less than 5. Trajectory inference is not possible.")
+
     EMD=adata.uns['EMD']/adata.uns['EMD'].max()
     df=adata.uns['annot']
     
@@ -185,6 +189,8 @@ def heatmaps(adata,figsize=(12,12),col_cluster=True,row_cluster=True,cmap='Blues
         os.makedirs(path)
         
     fig = plt.figure()
+    plt.subplots_adjust(hspace=0.5)
+
    # sns.set(font_scale=font_scale)
     sns.clustermap(cost[annot.cell_type.unique()],cmap=cmap,figsize=figsize,col_cluster=col_cluster,row_cluster=row_cluster);
     plt.title('Cost Matrix',loc='center')
@@ -803,9 +809,10 @@ def exploring_specific_genes(
         image = imread(image_path)
     
     # Set the size of the figure
-    fig, ax = plt.subplots(int(np.ceil(len(gene_list) / 3)), len(n_clusters), constrained_layout = True,
-                figsize=(4.5 * len(real_labels), 4.5 * len(real_labels) / 4 * int(np.ceil(len(gene_list) / 3))))  # Adjust the width and height as needed
-    
+    fig, ax = plt.subplots(int(np.ceil(len(gene_list) / 3)), 3, constrained_layout = True,
+                figsize=(4.5 * len(real_labels), 5 * len(real_labels) / 4 * int(np.ceil(len(gene_list) / 3))))  # Adjust the width and height as needed
+    plt.subplots_adjust(hspace= 0.5)
+
     # Display the PNG image
     ax.imshow(image)
     # ax.set_xticks()
@@ -815,7 +822,7 @@ def exploring_specific_genes(
    
     
     
-def go_enrichment(df,num_gos=20,source=None,cell_type='cell_type',fontsize=32,s=200, figsize = (15,12),color = 'tab:blue',dpi=100,bbox_inches = 'tight', facecolor='white', transparent=False,organism='hsapiens', path_plt='Results_PILOT/', path_table='Results_PILOT/'):
+def go_enrichment(df,num_gos=20,source=None,cell_type='cell_type',fontsize=32,s=200, figsize = (15,12),color = 'tab:blue',dpi=100,bbox_inches = 'tight', facecolor='white', transparent=False,organism='hsapiens', path_plt='Results_PILOT/', path_table='Results_PILOT/',show_plt=True):
     
     """
     Perform Gene Ontology (GO) enrichment analysis and create a scatterplot of enriched terms.
@@ -895,6 +902,9 @@ def go_enrichment(df,num_gos=20,source=None,cell_type='cell_type',fontsize=32,s=
     if not os.path.exists(path_plt+'GO/'+cell_type+'/'):
         os.makedirs(path_plt+'GO/'+cell_type+'/')
     plt.savefig(path_plt+'GO/'+cell_type+'/'+cell_type+".pdf", bbox_inches = bbox_inches, facecolor=facecolor, transparent=transparent)
+
+    if show_plt == False:
+        plt.close()
     
 def plt_gene_cluster_differentiation(cellnames=['healthy_CM','Myofib'],font_size=22,p_value=0.01,fc_ther=0.5):
     """
@@ -1004,10 +1014,10 @@ def plot_best_matches_cell_types(target, data,df,sorted_best, scale_name, min_ta
             plt.figure(figsize=((width, height)))
     elif (axis == "timepoints"):
             width = 6* len(df['sampleID'])
-            height = 4* len(sorted_best) 
+            height = 3.5* len(sorted_best) 
             plt.figure(figsize=((width, height)))
     
-    plt.subplots_adjust(wspace = 0.5, hspace = 1 )
+    plt.subplots_adjust(wspace = 0.4, hspace = 1 )
    # plt.suptitle(xlabel, fontsize=20, y=0.95)
     plt.tight_layout()
     
