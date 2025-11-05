@@ -323,8 +323,7 @@ def plot_each_cluster_activities(curves: pd.DataFrame = None,
     """
     
     n_clusters = np.unique(genes_clusters['cluster'])
-    fig, axs = plt.subplots(nrows= 1, ncols= len(n_clusters), constrained_layout= True, figsize= (len(n_clusters) * 4, 4))
-    plt.subplots_adjust(hspace= 0.5)
+    fig, axs = plt.subplots(nrows= 1, ncols= len(n_clusters), figsize= (len(n_clusters) * 4, 4))
 
     j = 0
     tickers = list(n_clusters)
@@ -370,6 +369,7 @@ def plot_each_cluster_activities(curves: pd.DataFrame = None,
         j += 1
     
     plt.savefig(path_to_figures+'genes_selection_analysis/'+cell_type+'/'+'clusters_activities.pdf')
+    plt.tight_layout(pad= 0.8)
     plt.show()
     
 def adjust_p_values(p_values):
@@ -469,8 +469,7 @@ def plot_rank_genes_cluster(curves_activities: pd.DataFrame = None,
     n_clusters = np.unique(clusters)
     
     tickers = list(n_clusters)
-    fig, axs = plt.subplots(nrows = 1, ncols = len(n_clusters), constrained_layout= True, figsize = (len(n_clusters) * 4, 4))
-    plt.subplots_adjust(hspace = 0.5)
+    fig, axs = plt.subplots(nrows = 1, ncols = len(n_clusters), figsize = (len(n_clusters) * 4, 4))
 
     if len(n_clusters) == 1:
         my_axs = [axs]
@@ -514,6 +513,7 @@ def plot_rank_genes_cluster(curves_activities: pd.DataFrame = None,
         j += 1
     
     plt.savefig(path_to_figures+'genes_selection_analysis/'+cell_type+'/'+'rank_genes_clusters.pdf')
+    plt.tight_layout(pad= 0.8)
     plt.show()
 
     return rank_genes
@@ -908,7 +908,7 @@ def plot_gene_list_pattern(gene_list: list,
             else:
                 axes[g, c].set_axis_off()
     
-    plt.subplot_adjust(hspace= 0.5)
+    fig.get_layout_engine().set(hspace=0.2, wspace=0.1)
     plt.show() 
 
   

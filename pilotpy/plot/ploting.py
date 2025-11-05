@@ -809,8 +809,7 @@ def exploring_specific_genes(
         image = imread(image_path)
     
     # Set the size of the figure
-    fig, ax = plt.subplots(int(np.ceil(len(gene_list) / 3)), 3, constrained_layout = True,
-                figsize=(4.5 * len(real_labels), 5 * len(real_labels) / 4 * int(np.ceil(len(gene_list) / 3))))  # Adjust the width and height as needed
+    fig, ax = plt.subplots(figsize=(4.5 * len(real_labels)+10, 5 * len(real_labels) / 4 * int(np.ceil(len(gene_list) / 3)))+10)  # Adjust the width and height as needed
 
     # Display the PNG image
     ax.imshow(image)
@@ -2106,14 +2105,16 @@ def plot_stats_by_pattern(cluster_names: list = None,
         expression_patterns = np.unique(sort_my_data['Expression pattern'])
         if(len(expression_patterns)):
 
-            n_col = 4
-            n_row = len(expression_patterns)
+            n_col = 3
+            n_row = int(np.ceil(len(gene_list) / 3))
             n_px = 10
+            width = (4.5 * len(labels))
+            height = (5 * len(labels)) / (4 * int(np.ceil(len(gene_list) / 3)))
 
             plt.rcParams["figure.facecolor"] = 'w'
                
              # Set the overall figure size
-            plt.figure(figsize=(80, 80))          
+            plt.figure(figsize=((width+10, height+10)))          
             
             # Adjust the size of individual subplots
             subplot_width = 8  # Choose an appropriate value
@@ -2123,10 +2124,8 @@ def plot_stats_by_pattern(cluster_names: list = None,
                f, axs = plt.subplots(n_row, n_col, figsize=(n_col * subplot_width, n_row * subplot_height))
                axs = np.atleast_2d(axs)
             if axis == "timepoints":
-               f, axs = plt.subplots(n_row, n_col, figsize=(4.5 * len(labels), (4.5 * len(labels))/1.5))
+               f, axs = plt.subplots(n_row, n_col, figsize=(width, height))
                axs = np.atleast_2d(axs)
-           
-          
 
             p = 0
             for pattern in expression_patterns:
