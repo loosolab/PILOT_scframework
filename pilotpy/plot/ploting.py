@@ -2114,7 +2114,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
             plt.rcParams["figure.facecolor"] = 'w'
                
              # Set the overall figure size
-            plt.figure(figsize=((width+10, height+10)))          
+            plt.figure(figsize=((n_col * width, n_row * height)))          
             
             # Adjust the size of individual subplots
             subplot_width = 8  # Choose an appropriate value
@@ -2124,7 +2124,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
                f, axs = plt.subplots(n_row, n_col, figsize=(n_col * subplot_width, n_row * subplot_height))
                axs = np.atleast_2d(axs)
             if axis == "timepoints":
-               f, axs = plt.subplots(n_row, n_col, figsize=(n_col * width, n_row * height))
+               f, axs = plt.subplots(n_row, n_col, figsize=(width, height))
                axs = np.atleast_2d(axs)
 
             p = 0
