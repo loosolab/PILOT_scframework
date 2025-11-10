@@ -1026,10 +1026,11 @@ def genes_selection_analysis(
                                        path_to_results= path_to_tables)
     
 
+'''
 clusters = np.unique(genes_clusters['cluster'])
 outputs = []
 
-'''
+
  for idx in range(len(clusters)+1):
     out = widgets.Output()
     with out:
