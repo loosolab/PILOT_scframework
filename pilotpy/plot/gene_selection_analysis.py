@@ -295,7 +295,7 @@ def plot_each_cluster_activities(curves: pd.DataFrame = None,
                                  genes_clusters: pd.DataFrame = None,
                                  cell_type: str = None,
                                  pseudotime_sample_names: pd.DataFrame = None,
-                                 fontsize: int = 16,
+                                 fontsize: int = 14,
                                  path_to_figures: str = 'Results_PILOT/plots/'
                                 ):
     """
@@ -361,7 +361,7 @@ def plot_each_cluster_activities(curves: pd.DataFrame = None,
                         curves_mean - alpha * (curves_std),
                         curves_mean + alpha * (curves_std),
                         alpha = 0.2)
-        ax.set_title('cluster ' + str(ticker), fontsize = fontsize)
+        ax.set_title('cluster ' + str(ticker), fontsize = fontsize + 2, weight = 'bold')
 
         if j == 0:
             ax.set_ylabel('gene expression', fontsize = fontsize)
@@ -438,7 +438,7 @@ def compute_curves_activities(curves: pd.DataFrame = None,
     return curves_activities
 
 def plot_rank_genes_cluster(curves_activities: pd.DataFrame = None,
-                            fontsize: int = 12, 
+                            fontsize: int = 14, 
                             cell_type: str = None,
                             path_to_figures: str = 'Results_PILOT/plots/'
                             ):
@@ -503,17 +503,17 @@ def plot_rank_genes_cluster(curves_activities: pd.DataFrame = None,
         ax.set_xlim(0, np.ceil(np.max(x)) + margin)
         ax.set_ylim(-0.1, num * step + 0.2)
     
-        ax.set_xlabel('$-log_{10}$(p-value)', fontsize = fontsize - 2)
+        ax.set_xlabel('$-log_{10}$(p-value)', fontsize = fontsize)
         if j == 0:
-            ax.set_ylabel('rank', fontsize = fontsize - 2)
+            ax.set_ylabel('rank', fontsize = fontsize)
         ax.tick_params(axis='x', labelsize = fontsize - 2)
         ax.tick_params(axis='y', labelsize = fontsize - 2)
     
-        ax.set_title('cluster ' + str(ticker), fontsize = fontsize)
+        ax.set_title('cluster ' + str(ticker), fontsize = fontsize + 2, weight = 'bold')
         j += 1
     
-    plt.savefig(path_to_figures+'genes_selection_analysis/'+cell_type+'/'+'rank_genes_clusters.pdf')
     plt.tight_layout(pad= 0.8)
+    plt.savefig(path_to_figures+'genes_selection_analysis/'+cell_type+'/'+'rank_genes_clusters.pdf')
     plt.show()
 
     return rank_genes
@@ -673,7 +673,7 @@ def  plot_top_genes_patterns(rank_genes: pd.DataFrame,
                              path_to_results: str = 'Results_PILOT/',
                              plot_color: str = 'tab:orange',
                              points_color: str = 'viridis',
-                             fontsize: str = 16,
+                             fontsize: str = 14,
                              path_to_figures: str = 'Results_PILOT/plots/'
                              ):
     """
@@ -730,8 +730,8 @@ def  plot_top_genes_patterns(rank_genes: pd.DataFrame,
     
     n_px = 10
 
-    fig, axes = plt.subplots(10, len(n_clusters),
-                             figsize = (len(n_clusters) * n_px * 2, 10 * n_px))
+    fig, axes = plt.subplots(10, len(n_clusters), constrained_layout = True,
+                             figsize = (len(n_clusters) * n_px * 2.5, 15 * n_px))
     
     for c in n_clusters:
         for g in range(10):
@@ -767,7 +767,7 @@ def  plot_top_genes_patterns(rank_genes: pd.DataFrame,
             else:
                 axes[g, c - 1].set_axis_off()
     
-    plt.tight_layout(pad= 0.9)
+    fig.get_layout_engine().set(w_pad=4 / 72, h_pad=4 / 72, hspace=0.2, wspace=0.1)
     plt.savefig(path_to_figures + 'genes_selection_analysis/' + cell_type + '/' + 'top_genes_patterns.pdf')
     plt.show()
   

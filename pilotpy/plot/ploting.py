@@ -809,7 +809,7 @@ def exploring_specific_genes(
         image = imread(image_path)
     
     # Set the size of the figure
-    fig, ax = plt.subplots(figsize=(4.5 * len(real_labels)+10, 5 * len(real_labels) / 4 * int(np.ceil(len(gene_list) / 3)))+10)  # Adjust the width and height as needed
+    fig, ax = plt.subplots(figsize=fig_size)  # Adjust the width and height as needed
 
     # Display the PNG image
     ax.imshow(image)
