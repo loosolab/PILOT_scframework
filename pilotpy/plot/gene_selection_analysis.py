@@ -1026,43 +1026,44 @@ def genes_selection_analysis(
                                        path_to_results= path_to_tables)
     
 
-    clusters = np.unique(genes_clusters['cluster'])
-    outputs = []
+clusters = np.unique(genes_clusters['cluster'])
+outputs = []
 
-   '''
-     for idx in range(len(clusters)+1):
-        out = widgets.Output()
-        with out:
-            start = 1+idx
-            # Cluster pattern-plot
-            plt.figure(start)
-            plt.show()
+'''
+ for idx in range(len(clusters)+1):
+    out = widgets.Output()
+    with out:
+        start = 1+idx
+        # Cluster pattern-plot
+        plt.figure(start)
+        plt.show()
 
-            # plot top_genes
-            plt.figure(start+len(clusters))
-            plt.show()
+        # plot top_genes
+        plt.figure(start+len(clusters))
+        plt.show()
+        
+        # Top_genes pattern-plot
+        num_plots = len(rank_genes[rank_genes['cluster'] == clusters[idx-1]])
+        
+        j = 0
+        for g in range(num_plots+1):
+            if j == 0:
+                plt.figure(start+2*len(clusters)+g)
+                plt.show()
+            else:
+                plt.figure(start+2*len(clusters)+j+g)
+                plt.show()
+            j += num_plots
             
-            # Top_genes pattern-plot
-            num_plots = len(rank_genes[rank_genes['cluster'] == clusters[idx-1]])
-            
-            j = 0
-            for g in range(num_plots+1):
-                if j == 0:
-                    plt.figure(start+2*len(clusters)+g)
-                    plt.show()
-                else:
-                    plt.figure(start+2*len(clusters)+j+g)
-                    plt.show()
-                j += num_plots
-                
-        outputs.append(out)
+    outputs.append(out)
 
-    tab = widgets.Tab(children=outputs)
-    for i, title in enumerate(clusters):
-        tab.set_title(i, str(title))
+tab = widgets.Tab(children=outputs)
+for i, title in enumerate(clusters):
+    tab.set_title(i, str(title))
 
-    return tab 
-    '''
+return tab 
+'''
+
 
 def genes_selection_heatmap(
         adata: ad.AnnData,
