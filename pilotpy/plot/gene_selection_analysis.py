@@ -295,7 +295,7 @@ def plot_each_cluster_activities(curves: pd.DataFrame = None,
                                  genes_clusters: pd.DataFrame = None,
                                  cell_type: str = None,
                                  pseudotime_sample_names: pd.DataFrame = None,
-                                 fontsize: int = 14,
+                                 fontsize: int = 16,
                                  path_to_figures: str = 'Results_PILOT/plots/'
                                 ):
     """
@@ -368,8 +368,8 @@ def plot_each_cluster_activities(curves: pd.DataFrame = None,
         ax.set_xlabel('disease progression', fontsize = fontsize)
         j += 1
     
+    plt.tight_layout(pad= 0.9)
     plt.savefig(path_to_figures+'genes_selection_analysis/'+cell_type+'/'+'clusters_activities.pdf')
-    plt.tight_layout(pad= 0.8)
     plt.show()
     
 def adjust_p_values(p_values):
@@ -673,7 +673,7 @@ def  plot_top_genes_patterns(rank_genes: pd.DataFrame,
                              path_to_results: str = 'Results_PILOT/',
                              plot_color: str = 'tab:orange',
                              points_color: str = 'viridis',
-                             fontsize: str = 14,
+                             fontsize: str = 16,
                              path_to_figures: str = 'Results_PILOT/plots/'
                              ):
     """
@@ -730,7 +730,7 @@ def  plot_top_genes_patterns(rank_genes: pd.DataFrame,
     
     n_px = 10
 
-    fig, axes = plt.subplots(10, len(n_clusters), constrained_layout = True,
+    fig, axes = plt.subplots(10, len(n_clusters),
                              figsize = (len(n_clusters) * n_px * 2, 10 * n_px))
     
     for c in n_clusters:
@@ -767,6 +767,7 @@ def  plot_top_genes_patterns(rank_genes: pd.DataFrame,
             else:
                 axes[g, c - 1].set_axis_off()
     
+    plt.tight_layout(pad= 0.9)
     plt.savefig(path_to_figures + 'genes_selection_analysis/' + cell_type + '/' + 'top_genes_patterns.pdf')
     plt.show()
   
@@ -1027,8 +1028,9 @@ def genes_selection_analysis(
 
     clusters = np.unique(genes_clusters['cluster'])
     outputs = []
-    
-    for idx in range(len(clusters)+1):
+
+   '''
+     for idx in range(len(clusters)+1):
         out = widgets.Output()
         with out:
             start = 1+idx
@@ -1060,6 +1062,7 @@ def genes_selection_analysis(
         tab.set_title(i, str(title))
 
     return tab 
+    '''
 
 def genes_selection_heatmap(
         adata: ad.AnnData,

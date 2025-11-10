@@ -2105,8 +2105,8 @@ def plot_stats_by_pattern(cluster_names: list = None,
         expression_patterns = np.unique(sort_my_data['Expression pattern'])
         if(len(expression_patterns)):
 
-            n_col = 3
-            n_row = int(np.ceil(len(gene_list) / 3))
+            n_col = 4
+            n_row = len(expression_patterns)
             n_px = 10
             width = (4.5 * len(labels))
             height = (5 * len(labels)) / (4 * int(np.ceil(len(gene_list) / 3)))
