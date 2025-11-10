@@ -2124,7 +2124,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
                f, axs = plt.subplots(n_row, n_col, figsize=(n_col * subplot_width, n_row * subplot_height))
                axs = np.atleast_2d(axs)
             if axis == "timepoints":
-               f, axs = plt.subplots(n_row, n_col, figsize=(width, height))
+               f, axs = plt.subplots(n_row, n_col, figsize=(n_col * width, n_row * height))
                axs = np.atleast_2d(axs)
 
             p = 0

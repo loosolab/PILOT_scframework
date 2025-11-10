@@ -731,7 +731,7 @@ def  plot_top_genes_patterns(rank_genes: pd.DataFrame,
     n_px = 10
 
     fig, axes = plt.subplots(10, len(n_clusters), constrained_layout = True,
-                             figsize = (len(n_clusters) * n_px * 2.5, 15 * n_px))
+                             figsize = (len(n_clusters) * n_px * 2.5, 25 * n_px))
     
     for c in n_clusters:
         for g in range(10):
