@@ -36,7 +36,7 @@ from ..tools.Gene_cluster_specific_functions import *
 
 
 
-def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1, clusters = 'status',label_act = False,colors=False,location_labels='center', figsize=(12,12),font_size=24,axes_line_width=1,axes_color='black',facecolor='white',point_size=100,cmap='viridis',fontsize_legend=24,alpha_trans=1,plot_title = "Trajectory of the disease progression", path='Results_PILOT/plots'):
+def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1, clusters = 'status',label_act = False,colors=False,location_labels='center', figsize=(12,12),font_size=24,axes_line_width=1,axes_color='black',facecolor='white',point_size=100,fontsize_legend=24,alpha_trans=1,plot_title = "Trajectory of the disease progression", path='Results_PILOT/plots'):
     
     
     
@@ -133,7 +133,7 @@ def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1,
     for category in df[clusters].unique():
         aux = np.array(df[clusters] == category)
         group_data = embedding[aux]
-        scatter = ax.scatter(group_data[:,0],group_data[:,1], alpha=alpha_trans,label=category, cmap=cmap,s=point_size) 
+        scatter = ax.scatter(group_data[:,0],group_data[:,1], alpha=alpha_trans,label=category, s=point_size) 
         
         if label_act == True:
             names = np.array(df[df[clusters] == category].sampleID)
