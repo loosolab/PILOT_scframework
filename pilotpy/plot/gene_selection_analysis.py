@@ -488,7 +488,7 @@ def plot_rank_genes_cluster(curves_activities: pd.DataFrame = None,
         y = my_data['Terminal_logFC'].values
         txts = my_data.index.values
     
-        start = 0
+        start = 1
         step = 1
         num = len(y)
     
