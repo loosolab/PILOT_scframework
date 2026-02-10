@@ -283,6 +283,7 @@ def plot_heatmap_curves(curves: pd.DataFrame = None,
         g.ax_heatmap.tick_params(axis='y', labelsize = fontsize - 2)
 
     g.ax_cbar.tick_params(labelsize = fontsize)
+    g.ax_cbar.set_title('Gene clusters by pattern', fontsize = fontsize)
     g.ax_row_colors.tick_params(labelsize = fontsize + 2)
     
     if not os.path.exists(path_to_figures+"genes_selection_analysis/"+cell_type+"/"):
@@ -295,7 +296,7 @@ def plot_each_cluster_activities(curves: pd.DataFrame = None,
                                  genes_clusters: pd.DataFrame = None,
                                  cell_type: str = None,
                                  pseudotime_sample_names: pd.DataFrame = None,
-                                 fontsize: int = 14,
+                                 fontsize: int = 15,
                                  path_to_figures: str = 'Results_PILOT/plots/'
                                 ):
     """
@@ -361,11 +362,11 @@ def plot_each_cluster_activities(curves: pd.DataFrame = None,
                         curves_mean - alpha * (curves_std),
                         curves_mean + alpha * (curves_std),
                         alpha = 0.2)
-        ax.set_title('cluster ' + str(ticker), fontsize = fontsize + 2, weight = 'bold')
+        ax.set_title('cluster ' + str(ticker), fontsize = fontsize + 4, weight = 'bold')
 
         if j == 0:
             ax.set_ylabel('gene expression', fontsize = fontsize)
-        ax.set_xlabel('disease progression', fontsize = fontsize)
+        ax.set_xlabel('pseudotime', fontsize = fontsize)
         j += 1
     
     plt.tight_layout(pad= 0.9)
@@ -780,7 +781,7 @@ def plot_gene_list_pattern(gene_list: list,
                             fontsize = 14,
                             path_to_figures = 'Results_PILOT/plots',
                             path_to_tables = 'Results_PILOT/plots',
-                            axis = "samples"):
+                            axis = "numeric"):
     """
     
 
@@ -854,11 +855,11 @@ def plot_gene_list_pattern(gene_list: list,
     n_clusters = range(3)
     
     
-    if (axis == "samples"):
+    if (axis == "numeric"):
         fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), len(n_clusters), constrained_layout= True,
                                  figsize=(len(n_clusters) * n_px * 2, int(np.ceil(len(gene_list) / 3)) * len(n_clusters) * n_px / 2))
         axes = np.atleast_2d(axes)
-    elif (axis == "timepoints"):
+    elif (axis == "categoric"):
         fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), len(n_clusters), constrained_layout = True,
                                  figsize=(4.5 * len(pseudotime_sample_names.sampleID.values), 4.5 * len(pseudotime_sample_names.sampleID.values) / 4 * int(np.ceil(len(gene_list) / 3))))
         axes = np.atleast_2d(axes)

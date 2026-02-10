@@ -657,7 +657,7 @@ def cell_importance(adata,
                     col_cluster = True,
                     row_cluster = False,
                    organism='hsapiens',
-                   axis='samples', 
+                   axis='numeric', 
                    gprofil= False,
                    path_plt='Results_PILOT/plots',
                    path_table='Results_PILOT/plots'):
@@ -710,10 +710,6 @@ def cell_importance(adata,
         Visualizes and saves the cell type importance plot.
      """
 
-
-    
-    path_plt=path_plt
-    path_table=path_table
 
     real_labels = adata.uns['real_labels']
     pseudotime = adata.uns['pseudotime']
