@@ -106,7 +106,7 @@ def trajectory(adata,n_evecs = 2, epsilon =1, alpha = 0.5,knn= 64, sample_col=1,
         os.makedirs(path)
         
     #get colors from colormap 'tab20', max. 20 colors 
-    size= len(clusters)
+    size= len(df[clusters].unique())
     cmap = plt.get_cmap('tab20')
     values=np.linspace(0,1,size)
     colors = cmap(values)
@@ -800,21 +800,6 @@ def exploring_specific_genes(
 
     plot_stats_by_pattern(cluster_names, filtered_all_stats_extend, gene_dict, pline, path_to_tables, file_name, labels, gene_list, font_size=font_size,p_value=p_value,create_new_plot_folder=create_new_plot_folder,fc_ther=fc_ther, path_to_figures=path_to_figures, axis=axis)
     
-    # Load the PNG image file
-    if create_new_plot_folder:
-        image_path =path_to_figures+'plot_genes_for_'+str(cluster_name)+'/'+str(gene_list) + ".png"  # Replace with the actual path to your PNG image
-        image = imread(image_path)
-    else:    
-        image_path =path_to_figures+'plots_gene_cluster_differentiation/'+cluster_name +'.png'  # Replace with the actual path to your PNG image
-        image = imread(image_path)
-    
-    # Set the size of the figure
-    fig, ax = plt.subplots(figsize=fig_size)  # Adjust the width and height as needed
-
-    # Display the PNG image
-    ax.imshow(image)
-    # ax.set_xticks()
-    ax.axis('off')  # Turn off axis labels and ticks
     plt.show()
     
    
@@ -968,7 +953,7 @@ def qq_plot_gene(target, data, sorted_best, gene_name):
     stats.probplot( (best_tf - predictions), dist="norm", plot=pylab)
     pylab.show()
 
-def plot_best_matches_cell_types(target, data,df,sorted_best, scale_name, min_target=0, max_target=35,num=11,width=25,height=25,xlim=4,point_size=100,color_back=None,fontsize=28,alpha=1,cmap='viridis',axis='samples'):
+def plot_best_matches_cell_types(target, data,df,sorted_best, scale_name, min_target=0, max_target=35,num=11,width=25,height=25,xlim=4,point_size=100,color_back=None,fontsize=28,alpha=1,cmap='viridis',axis='numeric'):
     """
     Plot the best-fitted models for cell types.
 
@@ -989,6 +974,7 @@ def plot_best_matches_cell_types(target, data,df,sorted_best, scale_name, min_ta
         fontsize (int): Font size for the titles and labels.
         alpha (float): Alpha value for data points.
         cmap (str): Colormap for data points.
+        axis (str): Axis type, either 'numeric' or 'categoric'.
 
     Returns:
         None: This function generates the plot but does not return any value.
@@ -1008,9 +994,9 @@ def plot_best_matches_cell_types(target, data,df,sorted_best, scale_name, min_ta
         # end=df[df['Time_score']==max_x]['sampleID'].unique()
         # xlabel='From  '+ start+'  to  '+end
     
-    if (axis == "samples"):
+    if (axis == "numeric"):
             plt.figure(figsize=((width, height)))
-    elif (axis == "timepoints"):
+    elif (axis == "categoric")):
             width = 6* len(df['sampleID'])
             height = 4* len(sorted_best) 
             plt.figure(figsize=((width, height)))
@@ -2064,7 +2050,10 @@ def plot_stats_by_pattern(cluster_names: list = None,
                           file_name: str = "/Whole_expressions.csv",
                           labels: list = None,
                           gene_list: list = None,
-                          font_size: int = 24,p_value=0.01,create_new_plot_folder=False,fc_ther=0.5,
+                          font_size: int = 24,
+                          p_value=0.01, 
+                          create_new_plot_folder=False,
+                          fc_ther=0.5,
                           path_to_figures ='Results_PILOT/plots/',
                           axis= "samples"
                           ):
@@ -2091,7 +2080,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
 
     Returns
     -------
-    return figures for each cluster ploting top 4 genes for each pattern.
+    return figures for each gene plotting expression pattern compared to other clusters.
 
     """
     plt.rcParams.update({'font.size': font_size})
@@ -2101,17 +2090,18 @@ def plot_stats_by_pattern(cluster_names: list = None,
         my_data['FC']=my_data['FC'].astype(float)
         my_data=my_data[my_data['FC'] > fc_ther]
         sort_my_data = my_data.sort_values(['pvalue'],
-                ascending=[True]).groupby('Expression pattern').head(4)
-        expression_patterns = np.unique(sort_my_data['Expression pattern'])
-        if(len(expression_patterns)):
+                ascending=[True])
+        genes = sort_my_data.reset_index(drop=True)
 
-            n_col = 4
-            n_row = len(expression_patterns)
+        num_genes = len(genes)
+
+        if num_genes: 
+
+            n_col = 3
+            n_row = int(np.ceil(num_genes/ 3))
             n_px = 10
             width = (4.5 * len(labels))
-            height = (5 * len(labels)) / (4 * int(np.ceil(len(gene_list) / 3)))
-
-            plt.rcParams["figure.facecolor"] = 'w'
+            height = (5 * len(labels)) / (4 * n_row)
                
              # Set the overall figure size
             plt.figure(figsize=((n_col * width, n_row * height)))          
@@ -2127,69 +2117,68 @@ def plot_stats_by_pattern(cluster_names: list = None,
                f, axs = plt.subplots(n_row, n_col, figsize=(width, height))
                axs = np.atleast_2d(axs)
 
-            p = 0
-            for pattern in expression_patterns:
-                pattern_stats = sort_my_data[sort_my_data['Expression pattern'] == pattern]
-                k = 0
-                for i, row in pattern_stats.iterrows():
-                    cluster_n = row['cluster']
-                    gene_name = row['gene']
-                    WT_x, WT_tf, WT_curve, KO_x, KO_tf, KO_curve = get_two_tables(gene_name, cluster_n, gene_dict,
+            for idx, row in genes.iterrows():
+                r, c = divmod(idx, n_col)
+
+                cluster_n = row['cluster']
+                gene_name = row['gene']
+
+                WT_x, WT_tf, WT_curve, KO_x, KO_tf, KO_curve = get_two_tables(gene_name, cluster_n, gene_dict,
                                                                                   file_name, pline, path_to_results)
 
-                    if(KO_x is not None):
-                        axs[p, k].scatter([x+0.2 for x in KO_x], KO_tf, alpha = 0.2, c = "tab:gray")
-                    axs[p, k].scatter(WT_x, WT_tf, alpha = 0.5, c = WT_tf, cmap = 'viridis',
+                if(KO_x is not None):
+                    axs[r, c].scatter([x+0.2 for x in KO_x], KO_tf, alpha = 0.2, c = "tab:gray")
+                axs[r, c].scatter(WT_x, WT_tf, alpha = 0.5, c = WT_tf, cmap = 'viridis',
                               norm = colors.CenteredNorm(np.mean(WT_tf)))
 
-                    axs[p, k].axis(xmin = min(WT_x), xmax = max(WT_x))
+                axs[r, c].axis(xmin = min(WT_x), xmax = max(WT_x))
 
-                    #set xaxis labels
-                    if axis == "timepoints":
-                        axs[p, k].set_xticks(range(1,(len(labels)+1)), labels=labels['real_labels'], rotation=45, ha='right')
+                #set xaxis labels
+                if axis == "timepoints":
+                    axs[r, c].set_xticks(range(1,(len(labels)+1)), labels=labels['real_labels'], rotation=45, ha='right')
 
-                    if(KO_x is not None):
-                        axs[p, k].plot(np.linspace(min(WT_x),max(WT_x)), KO_curve,
+                if(KO_x is not None):
+                    axs[r, c].plot(np.linspace(min(WT_x),max(WT_x)), KO_curve,
                                        c = "dimgray", linewidth = 4.0)
-                    axs[p, k].plot(np.linspace(min(WT_x),max(WT_x)), WT_curve,
-                                   c = "tab:orange", linewidth = 4.0)
+                axs[r, c].plot(np.linspace(min(WT_x),max(WT_x)), WT_curve,
+                                c = "tab:orange", linewidth = 4.0)
 
-                    axs[p, k].set_title(gene_name, size = font_size, weight = 'bold')
-                    if( k == 0):
-                        plt.rcParams.update({'font.size': font_size-4})
-                        axs[p, k].set_ylabel(pattern, size = font_size-4)
-                    #else:
+                axs[r, c].set_title(gene_name, size = font_size, weight = 'bold')
+                if( c == 0):
+                    plt.rcParams.update({'font.size': font_size-4})
+                    axs[r, c].set_ylabel(pattern, size = font_size-4)
+                #else:
                         
-                     #   axs[p, k].set_ylabel('Gene expression', size = 16)
-                    plt.rcParams.update({'font.size': font_size})
-                    for item in (axs[p, k].get_xticklabels() + axs[p, k].get_yticklabels()):
-                        item.set_fontsize(font_size)
+                    #   axs[r, c].set_ylabel('Gene expression', size = 16)
+                plt.rcParams.update({'font.size': font_size})
+                for item in (axs[r, c].get_xticklabels() + axs[r, c].get_yticklabels()):
+                    item.set_fontsize(font_size)
 
                     plt.text(.01, .99, 'p-value = %.2e ' % + Decimal(str(row['pvalue'])),
                              ha = 'left', va = 'top',
-                             transform=axs[p, k].transAxes, size = font_size)
-                    axs[p, k].yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
-                    k += 1
-                while(k != 4):
-                    axs[p, k].set_axis_off()
-                    k += 1
-                p += 1
+                             transform=axs[r, c].transAxes, size = font_size)
+                    axs[r, c].yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
+                    c += 1
+                while(c != 4):
+                    axs[r, c].set_axis_off()
+                    c += 1
+                r += 1
+
             plt.subplots_adjust(wspace = 0.5, hspace = 0.7)
             
             if create_new_plot_folder:
                 if not os.path.exists(path_to_figures+'plot_genes_for_'+str(cluster)+'/'):  
                     os.makedirs(path_to_figures+'plot_genes_for_'+str(cluster)+'/')
             
-                save_path = path_to_figures+'plot_genes_for_'+str(cluster)+'/'+str(gene_list) + ".png"
+                save_path = path_to_figures+'plot_genes_for_'+str(cluster)+'/'+str(gene_list) + ".pdf"
                 plt.savefig(save_path)
                 plt.close()
             else:   
                 if not os.path.exists(path_to_figures+'plots_gene_cluster_differentiation/'):  
                         os.makedirs(path_to_figures+'plots_gene_cluster_differentiation/')
 
-                save_path = path_to_figures+'plots_gene_cluster_differentiation/'+str(cluster) + ".png"
+                save_path = path_to_figures+'plots_gene_cluster_differentiation/'+str(cluster) + ".pdf"
                 plt.savefig(save_path)
                 print('Plot for '+str(cluster))
                 plt.show()
-                plt.close()
 

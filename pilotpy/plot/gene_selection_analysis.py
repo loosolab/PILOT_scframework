@@ -1010,7 +1010,6 @@ def genes_selection_analysis(
     print("Compute curves activities... ")
     print("Save curves activities... ")
     print("Plot top 10 genes for each cluster")
-    print("Plot GO analysis for each cluster")
     
     plot_each_cluster_activities(noised_curves, genes_clusters, cell_type,
                                  pseudotime_sample_names, fontsize, path_to_figures)
@@ -1021,10 +1020,6 @@ def genes_selection_analysis(
     
     plot_top_genes_patterns(rank_genes, pseudotime_sample_names, cell_type, curves,
                             path_to_results= path_to_tables, fontsize = fontsize, path_to_figures= path_to_figures)
-    
-    annotation_cluster_genes_by_curves(curves_activities, cell_type, num_gos,
-                                       fig_h, fig_w, max_length, sources, fontsize, organism, path_to_figures,
-                                       path_to_results= path_to_tables)
     
 
 '''
