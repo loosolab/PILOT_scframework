@@ -23,6 +23,7 @@ from gprofiler import GProfiler
 import textwrap as tw
 import matplotlib.colors as pltcolors
 from decimal import Decimal
+from IPython.display import display, PDF
 import json
 import requests
 import gseapy as gp
@@ -1021,6 +1022,11 @@ def genes_selection_analysis(
     plot_top_genes_patterns(rank_genes, pseudotime_sample_names, cell_type, curves,
                             path_to_results= path_to_tables, fontsize = fontsize, path_to_figures= path_to_figures)
     
+    adata.uns['gene_selection_heatmap'] = {'cell_type': cell_type,
+                                           'curves': curves,
+                                           'noised_curves': noised_curves,
+                                           'pseudotime_sample_names': pseudotime_sample_names,
+                                           'curves_activities': curves_activities}
 
 '''
 clusters = np.unique(genes_clusters['cluster'])
@@ -1440,6 +1446,8 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
     path=path
     save_cell_type = adata.uns['gene_selection_heatmap']['cell_type']
     if save_cell_type == cell_type:
+        display(PDF(path + "gene_selection_analysis/" + str(cell_type) + "/heatmap_culstered.pdf"))
+        display(PDF(path + "gene_selection_analysis/" + str(cell_type) + "/clusters_activities.pdf"))
         curves_activities = adata.uns['gene_selection_heatmap']['curves_activities']
         col_names = ['Term', 'Combined Score', 'Genes', 'P-value']
         
@@ -1483,7 +1491,7 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
                     bbox_inches='tight', 
                     transparent=True)
     else:
-        return "Please run the funtion genes_selection_heatmap first!"        
+        return "Please run the funtion genes_selection_analysis first!"        
         
         
         

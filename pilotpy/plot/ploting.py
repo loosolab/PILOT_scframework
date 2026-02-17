@@ -2123,7 +2123,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
             if axis == "categoric":
                f, axs = plt.subplots(n_row, n_col, figsize=(width, height))
                axs = np.atleast_2d(axs)
-               
+
             for idx, row in genes.iterrows():
                 r, c = divmod(idx, n_col)
 
@@ -2152,7 +2152,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
                 axs[r, c].set_title(gene_name, size = font_size, weight = 'bold')
                 if( c == 0):
                     plt.rcParams.update({'font.size': font_size-4})
-                    axs[r, c].set_ylabel(pattern, size = font_size-4)
+                    axs[r, c].set_ylabel("Gene expression", size = font_size-4)
                 #else:
                         
                     #   axs[r, c].set_ylabel('Gene expression', size = 16)
