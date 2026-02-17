@@ -122,7 +122,7 @@ def get_noised_curves(adata: ad.AnnData = None,
     """
 
     # Get cells of one cell_type 
-    cells = pd.read_csv(path_to_results + "/cells/" + str(cell_type) + ".csv", index_col = 0)
+    cells = pd.read_csv(path_to_results + "cells/" + str(cell_type) + ".csv", index_col = 0)
 
     # Get the pseudotime points
     pseudotime_sample_names = cells[['sampleID', 'Time_score']].groupby('Time_score').first()
@@ -716,7 +716,7 @@ def  plot_top_genes_patterns(rank_genes: pd.DataFrame,
                            ascending=[True, False], inplace = True, key = abs)
     rank_genes['rank'] = rank_genes.groupby('cluster').cumcount(ascending=True)
     
-    cells = pd.read_csv(path_to_results + "/cells/" + str(cell_type) + ".csv",
+    cells = pd.read_csv(path_to_results + "cells/" + str(cell_type) + ".csv",
                         usecols = np.concatenate((np.array([sample_col, time_col]), rank_genes.index.values)))
     
     scaler = StandardScaler()
@@ -821,7 +821,7 @@ def plot_gene_list_pattern(gene_list: list,
         return "The gene list is not unique!"
     
     try:
-        cells = pd.read_csv(path_to_tables + "/cells/" + str(cell_type) + ".csv",
+        cells = pd.read_csv(path_to_tables + "cells/" + str(cell_type) + ".csv",
                                 usecols = np.concatenate((np.array([sample_col, time_col]), gene_list)))
     except ValueError:
         return "Some of the genes are not exists in cell type " + str(cell_type) + "!"

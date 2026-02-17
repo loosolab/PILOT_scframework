@@ -169,13 +169,13 @@ def compute_diff_expressions(adata,cell_type: str = None,
 
     path_to_result='Results_PILOT'
     
-    if os.path.exists(path_to_result + "/cells/" + cell_type + ".csv"):
+    if os.path.exists(path_to_result + "cells/" + cell_type + ".csv"):
 
-        cells = pd.read_csv(path_to_result + "/cells/" + cell_type + ".csv", index_col = 0)  
+        cells = pd.read_csv(path_to_result + "cells/" + cell_type + ".csv", index_col = 0)  
    
     elif cell_type not in adata.uns:
         cells=extract_cells_from_gene_expression_for_clustering(adata,sample_col=sample_col,col_cell=col_cell,cell_list=[cell_type],path_results=path,normalization=normalization,n_top_genes=n_top_genes,highly_variable_genes_=highly_variable_genes_)
-        #cells = pd.read_csv(path_to_result + "/cells/" + cell_type + ".csv", index_col = 0)
+        #cells = pd.read_csv(path_to_result + "cells/" + cell_type + ".csv", index_col = 0)
     
     elif cell_type in adata.uns :
          cells=adata.uns[cell_type] 

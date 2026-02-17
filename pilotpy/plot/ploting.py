@@ -233,7 +233,12 @@ def heatmaps_df(df, figsize=(12, 12), col_cluster=True, row_cluster=True, cmap= 
 
     path=path
     sns.clustermap(df,
-                                row_cluster=row_cluster,col_cluster=col_cluster,annot=False,cmap=cmap,figsize=figsize,xticklabels=True);
+                   row_cluster=row_cluster,
+                   col_cluster=col_cluster,
+                   annot=False,cmap=cmap,
+                   figsize=figsize,
+                   xticklabels=True)
+    
     plt.savefig(path+"/"+'Proportions_of_cell_types_for_samples_over_trajectory.pdf')
     
       
@@ -996,7 +1001,7 @@ def plot_best_matches_cell_types(target, data,df,sorted_best, scale_name, min_ta
     
     if (axis == "numeric"):
             plt.figure(figsize=((width, height)))
-    elif (axis == "categoric")):
+    elif (axis == "categoric"):
             width = 6* len(df['sampleID'])
             height = 4* len(sorted_best) 
             plt.figure(figsize=((width, height)))
