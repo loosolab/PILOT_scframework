@@ -857,11 +857,11 @@ def plot_gene_list_pattern(gene_list: list,
     
     
     if (axis == "numeric"):
-        fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), len(n_clusters), constrained_layout= True,
-                                 figsize=(len(n_clusters) * n_px * 2, int(np.ceil(len(gene_list) / 3)) * len(n_clusters) * n_px / 2))
+        fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), 3, constrained_layout= True,
+                                 figsize=(3 * n_px * 2, int(np.ceil(len(gene_list) / 3)) * 3 * n_px / 2))
         axes = np.atleast_2d(axes)
     elif (axis == "categoric"):
-        fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), len(n_clusters), constrained_layout = True,
+        fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), 3, constrained_layout = True,
                                  figsize=(4.5 * len(pseudotime_sample_names.sampleID.values), 4.5 * len(pseudotime_sample_names.sampleID.values) / 4 * int(np.ceil(len(gene_list) / 3))))
         axes = np.atleast_2d(axes)
 

@@ -2164,11 +2164,9 @@ def plot_stats_by_pattern(cluster_names: list = None,
                              ha = 'left', va = 'top',
                              transform=axs[r, c].transAxes, size = font_size)
                     axs[r, c].yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
-                    c += 1
-                while(c != 4):
+                    
+                while(c != num_genes):
                     axs[r, c].set_axis_off()
-                    c += 1
-                r += 1
 
             plt.subplots_adjust(wspace = 0.5, hspace = 0.7)
             
