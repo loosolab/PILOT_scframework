@@ -2118,12 +2118,14 @@ def plot_stats_by_pattern(cluster_names: list = None,
 
             if axis == "numeric":
                f, axs = plt.subplots(n_row, n_col, figsize=(n_col * subplot_width, n_row * subplot_height))
+               axs = np.atleast_2d(axes)
 
             if axis == "categoric":
                f, axs = plt.subplots(n_row, n_col, figsize=(width, height))
-
+               axs = np.atleast_2d(axes)
 
             for idx, row in genes.iterrows():
+                r, c = divmod(idx, n_col)
 
                 cluster_n = row['cluster']
                 gene_name = row['gene']
@@ -2132,37 +2134,36 @@ def plot_stats_by_pattern(cluster_names: list = None,
                                                                                   file_name, pline, path_to_results)
 
                 if(KO_x is not None):
-                    axs.scatter([x+0.2 for x in KO_x], KO_tf, alpha = 0.2, c = "tab:gray")
-                axs.scatter(WT_x, WT_tf, alpha = 0.5, c = WT_tf, cmap = 'viridis',
+                    axs[r, c].scatter([x+0.2 for x in KO_x], KO_tf, alpha = 0.2, c = "tab:gray")
+                axs[r, c].scatter(WT_x, WT_tf, alpha = 0.5, c = WT_tf, cmap = 'viridis',
                               norm = colors.CenteredNorm(np.mean(WT_tf)))
 
-                axs.axis(xmin = min(WT_x), xmax = max(WT_x))
-
+                axs[r, c].axis(xmin = min(WT_x), xmax = max(WT_x))
                 #set xaxis labels
                 if axis == "categoric":
-                    axs.set_xticks(range(1,(len(labels)+1)), labels=labels['real_labels'], rotation=45, ha='right')
+                    axs[r, c].set_xticks(range(1,(len(labels)+1)), labels=labels['real_labels'], rotation=45, ha='right')
 
                 if(KO_x is not None):
-                    axs.plot(np.linspace(min(WT_x),max(WT_x)), KO_curve,
+                    axs[r, c].plot(np.linspace(min(WT_x),max(WT_x)), KO_curve,
                                        c = "dimgray", linewidth = 4.0)
-                axs.plot(np.linspace(min(WT_x),max(WT_x)), WT_curve,
+                axs[r, c].plot(np.linspace(min(WT_x),max(WT_x)), WT_curve,
                                 c = "tab:orange", linewidth = 4.0)
 
-                axs.set_title(gene_name, size = font_size, weight = 'bold')
+                axs[r, c].set_title(gene_name, size = font_size, weight = 'bold')
                 if( c == 0):
                     plt.rcParams.update({'font.size': font_size-4})
-                    axs.set_ylabel(pattern, size = font_size-4)
+                    axs[r, c].set_ylabel(pattern, size = font_size-4)
                 #else:
                         
                     #   axs[r, c].set_ylabel('Gene expression', size = 16)
                 plt.rcParams.update({'font.size': font_size})
-                for item in (axs.get_xticklabels() + axs.get_yticklabels()):
+                for item in (axs[r, c].get_xticklabels() + axs[r, c].get_yticklabels()):
                     item.set_fontsize(font_size)
 
                     plt.text(.01, .99, 'p-value = %.2e ' % + Decimal(str(row['pvalue'])),
                              ha = 'left', va = 'top',
-                             transform=axs.transAxes, size = font_size)
-                    axs.yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
+                             transform=axs[r, c].transAxes, size = font_size)
+                    axs[r, c].yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
                     c += 1
                 while(c != 4):
                     axs[r, c].set_axis_off()
