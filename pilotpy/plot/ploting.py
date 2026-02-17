@@ -25,6 +25,7 @@ from genericpath import isfile
 from matplotlib.image import imread
 import warnings
 from warnings import warn
+import pickle
 import ot
 from logging import info, warn
 from cycler import cycler
@@ -1026,9 +1027,9 @@ def plot_best_matches_cell_types(target, data,df,sorted_best, scale_name, min_ta
         
         ax = plt.subplot(math.ceil(num/4), 4, j)
         
-        if (axis == "samples"):
+        if (axis == "numeric"):
             plt.xticks(np.arange(min_x,max_x,xlim))
-        elif (axis == "timepoints"):
+        elif (axis == "categoric"):
             plt.xticks(x,xlabel, rotation=45, ha='right')  
       
             
