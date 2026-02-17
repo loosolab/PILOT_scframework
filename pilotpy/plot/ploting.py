@@ -2118,12 +2118,12 @@ def plot_stats_by_pattern(cluster_names: list = None,
 
             if axis == "numeric":
                f, axs = plt.subplots(n_row, n_col, figsize=(n_col * subplot_width, n_row * subplot_height))
-               axs = np.atleast_2d(axes)
+               axs = np.atleast_2d(axs)
 
             if axis == "categoric":
                f, axs = plt.subplots(n_row, n_col, figsize=(width, height))
-               axs = np.atleast_2d(axes)
-
+               axs = np.atleast_2d(axs)
+               
             for idx, row in genes.iterrows():
                 r, c = divmod(idx, n_col)
 
