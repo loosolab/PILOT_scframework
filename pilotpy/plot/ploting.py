@@ -2108,6 +2108,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
             n_px = 10
             width = (4.5 * len(labels))
             height = (5 * len(labels)) / (4 * n_row)
+            total_plots = n_row * n_col
                
              # Set the overall figure size
             plt.figure(figsize=((n_col * width, n_row * height)))          
@@ -2164,7 +2165,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
                              ha = 'left', va = 'top',
                              transform=axs[r, c].transAxes, size = font_size)
                     axs[r, c].yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
-                                
+
                 for empty_idx in range(num_genes, total_plots):
                      r, c = divmod(empty_idx, n_col)
                      axs[r, c].set_axis_off()
