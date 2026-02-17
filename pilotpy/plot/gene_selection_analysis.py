@@ -879,9 +879,9 @@ def plot_gene_list_pattern(gene_list: list,
                                 scaled_curves.loc[gene_name],
                                 c = plot_color, linewidth = 6.0)
                 
-                if (axis == "samples"):
+                if (axis == "numeric"):
                     axes[g, c].set_xticklabels(axes[g, c].get_xticks().astype(int)) 
-                elif (axis == "timepoints"):
+                elif (axis == "categoric"):
                     axes[g, c].set_xticks(range(1, (len(pseudotime_sample_names.sampleID.values)+1)), labels= pseudotime_sample_names.sampleID.values, rotation=45, ha='right')
 
                 axes[g, c].set_title(gene_name,

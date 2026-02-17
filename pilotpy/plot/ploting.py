@@ -751,7 +751,7 @@ def exploring_specific_genes(
                         fc_ther=0.5,
                         path_to_tables='Results_PILOT/',
                         path_to_figures='Results_PILOT/',
-                        axis="samples"
+                        axis="numeric"
                         ):
     """
     Explore specific genes within a cluster to analyze their patterns in comparison to other cell types.
@@ -2061,7 +2061,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
                           create_new_plot_folder=False,
                           fc_ther=0.5,
                           path_to_figures ='Results_PILOT/plots/',
-                          axis= "samples"
+                          axis= "numeric"
                           ):
     """
     Parameters
@@ -2116,10 +2116,10 @@ def plot_stats_by_pattern(cluster_names: list = None,
             subplot_width = 8  # Choose an appropriate value
             subplot_height = 6  # Choose an appropriate value
 
-            if axis == "samples":
+            if axis == "numeric":
                f, axs = plt.subplots(n_row, n_col, figsize=(n_col * subplot_width, n_row * subplot_height))
                axs = np.atleast_2d(axs)
-            if axis == "timepoints":
+            if axis == "categoric":
                f, axs = plt.subplots(n_row, n_col, figsize=(width, height))
                axs = np.atleast_2d(axs)
 
@@ -2140,7 +2140,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
                 axs[r, c].axis(xmin = min(WT_x), xmax = max(WT_x))
 
                 #set xaxis labels
-                if axis == "timepoints":
+                if axis == "categoric":
                     axs[r, c].set_xticks(range(1,(len(labels)+1)), labels=labels['real_labels'], rotation=45, ha='right')
 
                 if(KO_x is not None):
