@@ -730,7 +730,7 @@ def get_coordinates(WT_adata: pd.DataFrame = None,
 def get_two_tables(gene_name: str = None,
                    cluster_n: str = None,
                    gene_dict: dict = None,
-                   file_name: str = "/Whole_expressions.csv",
+                   file_name: str = "Whole_expressions.csv",
                    pline: list = None,
                    path_to_results: str = None):
     """
