@@ -805,9 +805,6 @@ def exploring_specific_genes(
     labels = labels.sort_values(by = 'pseudotime')
 
     plot_stats_by_pattern(cluster_names, filtered_all_stats_extend, gene_dict, pline, path_to_tables, file_name, labels, gene_list, font_size=font_size,p_value=p_value,create_new_plot_folder=create_new_plot_folder,fc_ther=fc_ther, path_to_figures=path_to_figures, axis=axis)
-    
-    plt.show()
-    
    
     
     
@@ -2105,7 +2102,6 @@ def plot_stats_by_pattern(cluster_names: list = None,
 
             n_col = 3
             n_row = int(np.ceil(num_genes/ 3))
-            n_px = 10
             width = (4.5 * len(labels))
             height = (5 * len(labels)) / (4 * n_row)
             total_plots = n_row * n_col
@@ -2172,19 +2168,11 @@ def plot_stats_by_pattern(cluster_names: list = None,
 
             plt.subplots_adjust(wspace = 0.5, hspace = 0.7)
             
-            if create_new_plot_folder:
-                if not os.path.exists(path_to_figures+'plot_genes_for_'+str(cluster)+'/'):  
-                    os.makedirs(path_to_figures+'plot_genes_for_'+str(cluster)+'/')
-            
-                save_path = path_to_figures+'plot_genes_for_'+str(cluster)+'/'+str(gene_list) + ".pdf"
-                plt.savefig(save_path)
-                plt.close()
-            else:   
-                if not os.path.exists(path_to_figures+'plots_gene_cluster_differentiation/'):  
-                        os.makedirs(path_to_figures+'plots_gene_cluster_differentiation/')
+     
+            if not os.path.exists(path_to_figures+'plots_gene_cluster_differentiation/'):  
+                os.makedirs(path_to_figures+'plots_gene_cluster_differentiation/')
 
                 save_path = path_to_figures+'plots_gene_cluster_differentiation/'+str(cluster) + ".pdf"
                 plt.savefig(save_path)
-                print('Plot for '+str(cluster))
                 plt.show()
 
