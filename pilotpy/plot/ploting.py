@@ -2162,7 +2162,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
                      r, c = divmod(empty_idx, n_col)
                      axs[r, c].set_axis_off()
             
-            plt.subplots_adjust(wspace = 0.5, hspace = 0.7)
+            plt.subplots_adjust(wspace = 0.2, hspace = 0.4)
             
      
             if not os.path.exists(path_to_figures+'plots_gene_cluster_differentiation/'):  

@@ -265,8 +265,7 @@ def plot_heatmap_curves(curves: pd.DataFrame = None,
     reordered_labels = curves.index[g.dendrogram_row.reordered_ind].tolist()
     genes_clusters = genes_clusters.iloc[g.dendrogram_row.reordered_ind]
     clusters_numbers = (genes_clusters.groupby(genes_clusters['cluster'])
-                        .apply(lambda x: x.iloc[(len(x))//2])
-                       )
+                        .apply(lambda x: x.iloc[(len(x))//2]))
     use_ticks = []
     for label in clusters_numbers['Gene ID']:
         use_ticks.append(reordered_labels.index(label))
