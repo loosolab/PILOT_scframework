@@ -755,7 +755,7 @@ def get_two_tables(gene_name: str = None,
     Returns
     -------
     WT_x : TYPE
-        Time ponts of other clusters.
+        Time ponts of specific clusters.
     WT_tf : TYPE
         Average distribution of expression for specific clusters.
     WT_curve : TYPE

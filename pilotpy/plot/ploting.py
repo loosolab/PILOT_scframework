@@ -2102,24 +2102,20 @@ def plot_stats_by_pattern(cluster_names: list = None,
 
             n_col = 3
             n_row = int(np.ceil(num_genes/ 3))
-            width = (4.5 * len(labels))
-            height = (5 * len(labels)) / (4 * n_row)
-            total_plots = n_row * n_col
-               
-             # Set the overall figure size
-            plt.figure(figsize=((n_col * width, n_row * height)))          
-            
+
             # Adjust the size of individual subplots
-            subplot_width = 8  # Choose an appropriate value
-            subplot_height = 6  # Choose an appropriate value
-
             if axis == "numeric":
-               f, axs = plt.subplots(n_row, n_col, figsize=(n_col * subplot_width, n_row * subplot_height))
-               axs = np.atleast_2d(axs)
-
+                subplot_width = (3 * len(labels))  # Choose an appropriate value
+                subplot_height = (3 * len(labels))*0.65  # Choose an appropriate value
             if axis == "categoric":
-               f, axs = plt.subplots(n_row, n_col, figsize=(width, height))
-               axs = np.atleast_2d(axs)
+                subplot_width = (4.5 * len(labels))  # Choose an appropriate value
+                subplot_height = (4.5 * len(labels))*0.65  # Choose an appropriate value
+
+            total_plots = n_row * n_col          
+            
+            f, axs = plt.subplots(n_row, n_col, figsize=(n_col * subplot_width, n_row * subplot_height))
+            axs = np.atleast_2d(axs)
+
 
             for idx, row in genes.iterrows():
                 r, c = divmod(idx, n_col)
@@ -2165,7 +2161,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
                 for empty_idx in range(num_genes, total_plots):
                      r, c = divmod(empty_idx, n_col)
                      axs[r, c].set_axis_off()
-
+            
             plt.subplots_adjust(wspace = 0.5, hspace = 0.7)
             
      

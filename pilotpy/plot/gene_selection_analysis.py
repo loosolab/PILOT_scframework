@@ -23,7 +23,7 @@ from gprofiler import GProfiler
 import textwrap as tw
 import matplotlib.colors as pltcolors
 from decimal import Decimal
-from IPython.display import display_pdf
+from wand.image import Image 
 import json
 import requests
 import gseapy as gp
@@ -1443,11 +1443,13 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
     None.
 
     """
-    path=path
+
     save_cell_type = adata.uns['gene_selection_heatmap']['cell_type']
     if save_cell_type == cell_type:
-        display_pdf(path + "gene_selection_analysis/" + str(cell_type) + "/heatmap_culstered.pdf")
-        display_pdf(path + "gene_selection_analysis/" + str(cell_type) + "/clusters_activities.pdf")
+        img_heatmap = Image(path + "gene_selection_analysis/" + str(cell_type) + "/heatmap_culstered.pdf")
+        print(img_heatmap)
+        img_clusters = Image(path + "gene_selection_analysis/" + str(cell_type) + "/clusters_activities.pdf")
+        print(img_clusters)
         curves_activities = adata.uns['gene_selection_heatmap']['curves_activities']
         col_names = ['Term', 'Combined Score', 'Genes', 'P-value']
         
@@ -1465,20 +1467,21 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
         data = -np.log10(data)
         data = data.sort_values(list(data.columns[::-1]))
         data.columns = data.columns.astype(int)
-        plt.figure()
+
         ans = sns.clustermap(data, 
                      linewidths=1,
                      cmap='Reds',
                      fmt='',
+                     figsize=(6.8, len(GO_terms)*0.2),
                      row_cluster=False,
                      dendrogram_ratio=(0.2, 0.02),
-                     cbar_pos=(0.05, 0.45, .01, .2),
+                     cbar_pos=(0.07, 0.45, .01, .2),
                      cbar_kws={'label': '-$log_{10}$ (P-value)'},
                      xticklabels=True,
                      yticklabels=True
                             )
-        ans.ax_heatmap.set_xticklabels(ans.ax_heatmap.get_xmajorticklabels(), fontsize = font_size);
-        ans.ax_heatmap.set_yticklabels(ans.ax_heatmap.get_ymajorticklabels(), fontsize = font_size);
+        ans.ax_heatmap.set_xticklabels(ans.ax_heatmap.get_xmajorticklabels(), fontsize = font_size)
+        ans.ax_heatmap.set_yticklabels(ans.ax_heatmap.get_ymajorticklabels(), fontsize = font_size)
         cax = ans.figure.axes[-1]
         cax.tick_params(labelsize = font_size)
         cax.yaxis.label.set_size(font_size)
@@ -1486,8 +1489,8 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
         ans.ax_heatmap.set_ylabel('')
         ans.cax.yaxis.set_label_coords(-1.5,0.5)
 
-        plt.show()
-        plt.savefig(path + str(cell_type) + "pathways.pdf",
+        ans.show()
+        ans.savefig(path + "genes_selection_analysis/" + str(cell_type) +"/" + str(cell_type) + "_pathways.pdf",
                     bbox_inches='tight', 
                     transparent=True)
     else:
