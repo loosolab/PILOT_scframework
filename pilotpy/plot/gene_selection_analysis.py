@@ -195,7 +195,7 @@ def cluster_genes_curves(curves: pd.DataFrame = None,
         # retrieve clusters using fcluster 
         d = sch.distance.pdist(curves)
         L = sch.linkage(d, method = cluster_method, metric = cluster_metric)
-        
+ 
         # scaler_value can be modified to retrieve more stringent or relaxed clusters
         clusters = sch.fcluster(L, scaler_value * d.max(), 'distance')
     except ValueError:
@@ -245,7 +245,7 @@ def plot_heatmap_curves(curves: pd.DataFrame = None,
                           sns.color_palette("tab10", len(genes_clusters['cluster'].unique()))))
     row_colors = genes_clusters['cluster'].map(my_palette)
     row_colors.index = genes_clusters['Gene ID']
-    
+
     g = sns.clustermap(
     curves,
     method = cluster_method,
@@ -261,7 +261,7 @@ def plot_heatmap_curves(curves: pd.DataFrame = None,
     row_colors = row_colors.loc[curves.index],
     annot_kws = {"size": fontsize + 2}
     )
-    
+
     reordered_labels = curves.index[g.dendrogram_row.reordered_ind].tolist()
     genes_clusters = genes_clusters.iloc[g.dendrogram_row.reordered_ind]
     clusters_numbers = (genes_clusters.groupby(genes_clusters['cluster'])
@@ -269,7 +269,9 @@ def plot_heatmap_curves(curves: pd.DataFrame = None,
     use_ticks = []
     for label in clusters_numbers['Gene ID']:
         use_ticks.append(reordered_labels.index(label))
-    
+    print(clusters_numbers.head())
+    print(clusters_numbers.columns)
+    print(clusters_numbers.index)
     g.ax_heatmap.set(yticks = use_ticks, yticklabels = clusters_numbers['cluster'])
 
     g.ax_heatmap.set_ylabel("")
