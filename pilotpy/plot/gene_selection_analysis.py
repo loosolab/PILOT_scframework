@@ -23,7 +23,7 @@ from gprofiler import GProfiler
 import textwrap as tw
 import matplotlib.colors as pltcolors
 from decimal import Decimal
-from wand.image import Image 
+from IPython.display import IFrame
 import json
 import requests
 import gseapy as gp
@@ -1446,10 +1446,9 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
 
     save_cell_type = adata.uns['gene_selection_heatmap']['cell_type']
     if save_cell_type == cell_type:
-        img_heatmap = Image(path + "gene_selection_analysis/" + str(cell_type) + "/heatmap_culstered.pdf")
-        print(img_heatmap)
-        img_clusters = Image(path + "gene_selection_analysis/" + str(cell_type) + "/clusters_activities.pdf")
-        print(img_clusters)
+        IFrame(path + "gene_selection_analysis/" + str(cell_type) + "/heatmap_culstered.pdf", width="100%", height="100%")
+        IFrame(path + "gene_selection_analysis/" + str(cell_type) + "/clusters_activities.pdf", width="100%", height="100%")
+
         curves_activities = adata.uns['gene_selection_heatmap']['curves_activities']
         col_names = ['Term', 'Combined Score', 'Genes', 'P-value']
         
