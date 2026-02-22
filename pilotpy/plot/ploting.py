@@ -2105,11 +2105,11 @@ def plot_stats_by_pattern(cluster_names: list = None,
 
             # Adjust the size of individual subplots
             if axis == "numeric":
-                subplot_width = (3 * len(labels))  # Choose an appropriate value
-                subplot_height = (3 * len(labels))*0.65  # Choose an appropriate value
+                subplot_width = 3 * len(labels)  # Choose an appropriate value
+                subplot_height = subplot_width*0.65  # Choose an appropriate value
             if axis == "categoric":
-                subplot_width = (4.5 * len(labels))  # Choose an appropriate value
-                subplot_height = (4.5 * len(labels))*0.65  # Choose an appropriate value
+                subplot_width = 4.5 * len(labels)  # Choose an appropriate value
+                subplot_height = subplot_width*0.65  # Choose an appropriate value
 
             total_plots = n_row * n_col          
             

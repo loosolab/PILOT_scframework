@@ -1462,6 +1462,7 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
               
         data = GO_terms.pivot(index='Term', columns='cluster', values='P-value')
         data = data.fillna(1)
+        data = data.astype(float)
         data = -np.log10(data)
         data = data.sort_values(list(data.columns[::-1]))
         data.columns = data.columns.astype(int)
