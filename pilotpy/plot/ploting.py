@@ -2162,13 +2162,13 @@ def plot_stats_by_pattern(cluster_names: list = None,
                      r, c = divmod(empty_idx, n_col)
                      axs[r, c].set_axis_off()
             
-            plt.subplots_adjust(wspace = 0.2, hspace = 0.4)
+            f.get_layout_engine().set(hspace=0.2, wspace=0.1)
             
      
-            if not os.path.exists(path_to_figures+'plots_gene_cluster_differentiation/'):  
-                os.makedirs(path_to_figures+'plots_gene_cluster_differentiation/')
+            if not os.path.exists(path_to_figures+'plots_gene_pattern_comparison/'):  
+                os.makedirs(path_to_figures+'plots_gene_pattern_comparison/')
 
-                save_path = path_to_figures+'plots_gene_cluster_differentiation/'+str(cluster) + ".pdf"
-                plt.savefig(save_path)
-                plt.show()
+            save_path = path_to_figures+'plots_gene_pattern_comparison/'+str(cluster) + ".pdf"
+            plt.savefig(save_path)
+            plt.show()
 
