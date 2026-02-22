@@ -2113,7 +2113,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
 
             total_plots = n_row * n_col          
             
-            f, axs = plt.subplots(n_row, n_col, figsize=(n_col * subplot_width, n_row * subplot_height), constrained_layout= True)
+            f, axs = plt.subplots(n_row, n_col, figsize=(n_col * subplot_width, n_row * subplot_height))
             axs = np.atleast_2d(axs)
 
 
