@@ -2113,7 +2113,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
 
             total_plots = n_row * n_col          
             
-            f, axs = plt.subplots(n_row, n_col, constrained_layout=True, figsize=(n_col * subplot_width, n_row * subplot_height))
+            f, axs = plt.subplots(n_row, n_col, figsize=(n_col * subplot_width, n_row * subplot_height), constrained_layout= True)
             axs = np.atleast_2d(axs)
 
 
@@ -2144,12 +2144,10 @@ def plot_stats_by_pattern(cluster_names: list = None,
 
                 axs[r, c].set_title(gene_name, size = font_size, weight = 'bold')
                 if( c == 0):
-                    plt.rcParams.update({'font.size': font_size-4})
                     axs[r, c].set_ylabel("Gene expression", size = font_size-4)
                 #else:
                         
                     #   axs[r, c].set_ylabel('Gene expression', size = 16)
-                plt.rcParams.update({'font.size': font_size})
                 for item in (axs[r, c].get_xticklabels() + axs[r, c].get_yticklabels()):
                     item.set_fontsize(font_size)
 
@@ -2171,4 +2169,3 @@ def plot_stats_by_pattern(cluster_names: list = None,
             save_path = path_to_figures+'plots_gene_pattern_comparison/'+str(cluster) + ".pdf"
             plt.savefig(save_path)
             plt.show()
-

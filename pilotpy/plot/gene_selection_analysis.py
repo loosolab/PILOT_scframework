@@ -1471,16 +1471,16 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
                      linewidths=1,
                      cmap='Reds',
                      fmt='',
-                     figsize=(6.8, len(GO_terms)*0.2),
+                     figsize=((len(GO_terms)*0.1)*0.75, len(GO_terms)*0.12),
                      row_cluster=False,
-                     dendrogram_ratio=(0.2, 0.02),
+                     dendrogram_ratio=(0.05, 0.05),
                      cbar_pos=(0.07, 0.45, .01, .2),
                      cbar_kws={'label': '-$log_{10}$ (P-value)'},
                      xticklabels=True,
                      yticklabels=True
                             )
         ans.ax_heatmap.set_xticklabels(ans.ax_heatmap.get_xmajorticklabels(), fontsize = font_size)
-        ans.ax_heatmap.set_yticklabels(ans.ax_heatmap.get_ymajorticklabels(), fontsize = font_size)
+        ans.ax_heatmap.set_yticklabels(ans.ax_heatmap.get_ymajorticklabels(), fontsize = 12)
         cax = ans.figure.axes[-1]
         cax.tick_params(labelsize = font_size)
         cax.yaxis.label.set_size(font_size)
@@ -1488,7 +1488,6 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
         ans.ax_heatmap.set_ylabel('')
         ans.cax.yaxis.set_label_coords(-1.5,0.5)
 
-        ans.show()
         ans.savefig(path + "genes_selection_analysis/" + str(cell_type) +"/" + str(cell_type) + "_pathways.pdf",
                     bbox_inches='tight', 
                     transparent=True)
