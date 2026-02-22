@@ -2106,10 +2106,10 @@ def plot_stats_by_pattern(cluster_names: list = None,
             # Adjust the size of individual subplots
             if axis == "numeric":
                 subplot_width = 3 * len(labels)  # Choose an appropriate value
-                subplot_height = subplot_width*0.65  # Choose an appropriate value
+                subplot_height = subplot_width /4  # Choose an appropriate value
             if axis == "categoric":
                 subplot_width = 4.5 * len(labels)  # Choose an appropriate value
-                subplot_height = subplot_width*0.65  # Choose an appropriate value
+                subplot_height = subplot_width /4  # Choose an appropriate value
 
             total_plots = n_row * n_col          
             
@@ -2159,9 +2159,8 @@ def plot_stats_by_pattern(cluster_names: list = None,
                 for empty_idx in range(num_genes, total_plots):
                      r, c = divmod(empty_idx, n_col)
                      axs[r, c].set_axis_off()
-            
-            f.get_layout_engine().set(hspace=0.2, wspace=0.1)
-            
+        
+            plt.tight_layout(h_pad=0.2, w_pad=0.1)
      
             if not os.path.exists(path_to_figures+'plots_gene_pattern_comparison/'):  
                 os.makedirs(path_to_figures+'plots_gene_pattern_comparison/')
