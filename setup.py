@@ -24,7 +24,7 @@ setup(
             "seaborn",
             "shap",
             "statsmodels",
-            "elpigraph-python",
+            "elpigraph-python>=0.3.4",
             "adjusttext",
             "gprofiler-official",
             "gseapy",
