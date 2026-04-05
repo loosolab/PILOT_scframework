@@ -257,10 +257,13 @@ def fit_model_activity(func_type, X, y,max_iter_huber,epsilon_huber,model_type):
     
     # [elem for elem in my_list if elem == 'two']
     # sum(1/2*np.sum(e**2) for e in res_e if abs(e) < delata else delata *(abs(e) - (1/2)*delata))
-
+    
     new_X = np.append(np.ones((len(X),1)), X, axis=1)
     M_S_E = (sum((y-predictions)**2))/(len(new_X)-len(new_X[0]))
-    v_b = M_S_E*(np.linalg.inv(np.dot(new_X.T,new_X)).diagonal())
+    if len(new_X) == 0:
+        v_b = np.full((1), np.nan)
+    else:
+        v_b = M_S_E*(np.linalg.inv(np.dot(new_X.T,new_X)).diagonal())
     s_b = np.sqrt(v_b)
     t_b = params/ s_b
     p_val =[2*(1-stats.t.cdf(np.abs(i),(len(new_X)-len(new_X[0])))) for i in t_b]
