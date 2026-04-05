@@ -808,7 +808,7 @@ def cell_importance(adata,
 
 
 
-def extract_cells_from_gene_expression(adata,sample_col,col_cell,cell_list=[],normalize=True):
+def extract_cells_from_gene_expression(adata,sample_col,col_cell,cell_list=[],normalize=True,path='Results_PILOT'):
     """
     Extract gene expression data for specific cells and associate them with pseudotime.
 
@@ -832,7 +832,6 @@ def extract_cells_from_gene_expression(adata,sample_col,col_cell,cell_list=[],no
     """
 
     
-    path_results='Results_PILOT'
     orders=adata.uns['orders']
 
     if len(cell_list)==0:
@@ -856,7 +855,8 @@ def extract_cells_from_gene_expression(adata,sample_col,col_cell,cell_list=[],no
             os.makedirs(path_results+'/cells/') 
         if '/' in cell:
             cell=cell.replace('/','_')
-        joint.to_csv(path_results+'/cells/'+cell+'.csv')
+
+        joint.to_csv(path+'/cells/'+cell+'.csv')
 
         return joint
 
@@ -930,9 +930,7 @@ def genes_importance(adata,name_cell,col='Time_score',genes_index=[],p_value=0.0
     """
 
     
-    path = path
-    
-    data=extract_cells_from_gene_expression(adata,sample_col=sample_col,col_cell=col_cell,cell_list=[name_cell],normalize=normalize)
+    data=extract_cells_from_gene_expression(adata,sample_col=sample_col,col_cell=col_cell,cell_list=[name_cell],normalize=normalize,path=path)
      
     if len(colnames)!=0:  #for pathmics data
         for col in colnames:
