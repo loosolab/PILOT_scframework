@@ -132,7 +132,7 @@ def get_noised_curves(adata: ad.AnnData = None,
     pseudotime_sample_names = pseudotime_sample_names.sort_index()
     
     # Read the table of fitted function for each gene
-    table = pd.read_csv(path_to_results + "/Markers/" + str(cell_type) + "/Whole_expressions.csv", index_col = 0)
+    table = pd.read_csv(path_to_results + "Markers/" + str(cell_type) + "/Whole_expressions.csv", index_col = 0)
     if len(table) == 0:
         raise ValueError("There are no significant genes for this cell type!")
     table = table.fillna(0)
@@ -919,6 +919,7 @@ def plot_gene_list_pattern(gene_list: list,
                 axes[g, c].set_axis_off()
     
     fig.get_layout_engine().set(hspace=0.2, wspace=0.1)
+    plt.savefig(path_to_figures + 'genes_selection_analysis/' + cell_type + '/' + str(gene_list) + '_gene_list_patterns.pdf')
     plt.show() 
 
   

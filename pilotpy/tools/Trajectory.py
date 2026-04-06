@@ -962,10 +962,12 @@ def genes_importance(adata,name_cell,col='Time_score',genes_index=[],p_value=0.0
     
     
     #%%% plot RNA data
-    if not os.path.exists(path+'/Markers'):
-        os.makedirs(path+'/Markers')
-    if not os.path.exists(path+'/Markers/'+name_cell):
-            os.makedirs(path+'/Markers/'+name_cell)
+    if not os.path.exists(path+'Markers'):
+        os.makedirs(path+'Markers')
+    if '/' in name_cell:
+        name_cell=name_cell.replace('/','_')
+    if not os.path.exists(path+'Markers/'+name_cell):
+            os.makedirs(path+'Markers/'+name_cell)
     
     if save_as_pdf:
         suffix='.pdf'

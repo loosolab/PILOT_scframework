@@ -804,7 +804,7 @@ def exploring_specific_genes(
     labels = pd.DataFrame({'real_labels': real_labels, 'pseudotime': pseudotime})
     labels = labels.sort_values(by = 'pseudotime')
 
-    plot_stats_by_pattern(cluster_names, filtered_all_stats_extend, gene_dict, pline, path_to_tables, file_name, labels, gene_list, font_size=font_size,p_value=p_value,create_new_plot_folder=create_new_plot_folder,fc_ther=fc_ther, path_to_figures=path_to_figures, axis=axis)
+    plot_stats_by_pattern(cluster_name, cluster_names, filtered_all_stats_extend, gene_dict, pline, path_to_tables, file_name, labels, gene_list, font_size=font_size,p_value=p_value,create_new_plot_folder=create_new_plot_folder,fc_ther=fc_ther, path_to_figures=path_to_figures, axis=axis)
    
     
     
@@ -2076,6 +2076,10 @@ def plot_stats_by_pattern(cluster_names: list = None,
     file_name : str, optional
         File name same for all clusters have fitting information for genes.
         The default is "/Whole_expressions.csv".
+    labels : list, optional
+        List of labels for x axis. The default is None.
+    gene_list : list, optional
+        List of genes to be plotted. 
     font_size : int, optional
         Specify font size for labels and names. The default is 12.
     fc_ther: float, optional
@@ -2162,9 +2166,9 @@ def plot_stats_by_pattern(cluster_names: list = None,
         
             plt.tight_layout(h_pad=0.2, w_pad=0.1)
      
-            if not os.path.exists(path_to_figures+'plots_gene_pattern_comparison/'):  
-                os.makedirs(path_to_figures+'plots_gene_pattern_comparison/')
+            if not os.path.exists(path_to_figures+ cluster + 'plots_gene_pattern_comparison/'):  
+                os.makedirs(path_to_figures+ cluster + 'plots_gene_pattern_comparison/')
 
-            save_path = path_to_figures+'plots_gene_pattern_comparison/'+str(cluster) + ".pdf"
+            save_path = path_to_figures+ cluster + 'plots_gene_pattern_comparison/'+str(gene_list) + ".pdf"
             plt.savefig(save_path)
             plt.show()
