@@ -133,6 +133,8 @@ def get_noised_curves(adata: ad.AnnData = None,
     
     # Read the table of fitted function for each gene
     table = pd.read_csv(path_to_results + "/Markers/" + str(cell_type) + "/Whole_expressions.csv", index_col = 0)
+    if len(table) == 0:
+        raise ValueError("There are no significant genes for this cell type!")
     table = table.fillna(0)
 
     # Filter the table based on the r-square and its p-value
@@ -163,7 +165,7 @@ def get_noised_curves(adata: ad.AnnData = None,
     
     scaler = StandardScaler()
     scaled_curves = pd.DataFrame(scaler.fit_transform(curves.transpose()).transpose())
-    scaled_curves.columns = str(curves.columns)
+    scaled_curves.columns = curves.columns.astype(str)
     scaled_curves.index = curves.index
     
     return scaled_curves, scaled_noised_curves, pseudotime_sample_names
