@@ -163,7 +163,7 @@ def get_noised_curves(adata: ad.AnnData = None,
     
     scaler = StandardScaler()
     scaled_curves = pd.DataFrame(scaler.fit_transform(curves.transpose()).transpose())
-    scaled_curves.columns = curves.columns
+    scaled_curves.columns = str(curves.columns)
     scaled_curves.index = curves.index
     
     return scaled_curves, scaled_noised_curves, pseudotime_sample_names
