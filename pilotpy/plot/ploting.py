@@ -804,7 +804,7 @@ def exploring_specific_genes(
     labels = pd.DataFrame({'real_labels': real_labels, 'pseudotime': pseudotime})
     labels = labels.sort_values(by = 'pseudotime')
 
-    plot_stats_by_pattern(cluster_name, cluster_names, filtered_all_stats_extend, gene_dict, pline, path_to_tables, file_name, labels, gene_list, font_size=font_size,p_value=p_value,create_new_plot_folder=create_new_plot_folder,fc_ther=fc_ther, path_to_figures=path_to_figures, axis=axis)
+    plot_stats_by_pattern(cluster_names, filtered_all_stats_extend, gene_dict, pline, path_to_tables, file_name, labels, gene_list, font_size=font_size, p_value=p_value,create_new_plot_folder=create_new_plot_folder,fc_ther=fc_ther, path_to_figures=path_to_figures, axis=axis)
    
     
     
