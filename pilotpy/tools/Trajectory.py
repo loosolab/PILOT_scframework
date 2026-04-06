@@ -851,8 +851,8 @@ def extract_cells_from_gene_expression(adata,sample_col,col_cell,cell_list=[],no
         df.columns=adata_new.var_names
         df['sampleID']=list(adata_new.obs[sample_col])
         joint=orders.merge(df,on='sampleID')
-        if not os.path.exists(path_results+'/cells/'):
-            os.makedirs(path_results+'/cells/') 
+        if not os.path.exists(path+'/cells/'):
+            os.makedirs(path+'/cells/') 
         if '/' in cell:
             cell=cell.replace('/','_')
 
