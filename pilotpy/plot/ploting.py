@@ -2111,7 +2111,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
             if axis == "numeric":
                 subplot_width = 3 * len(labels)  # Choose an appropriate value
                 subplot_height = subplot_width /4  # Choose an appropriate value
-            if axis == "categoric":
+            else:
                 subplot_width = 4.5 * len(labels)  # Choose an appropriate value
                 subplot_height = subplot_width /4  # Choose an appropriate value
 
@@ -2166,9 +2166,9 @@ def plot_stats_by_pattern(cluster_names: list = None,
         
             plt.tight_layout(h_pad=0.2, w_pad=0.1)
      
-            if not os.path.exists(path_to_figures+ cluster + 'plots_gene_pattern_comparison/'):  
-                os.makedirs(path_to_figures+ cluster + 'plots_gene_pattern_comparison/')
+            if not os.path.exists(path_to_figures+ 'plots_gene_pattern_comparison/'):  
+                os.makedirs(path_to_figures+ 'plots_gene_pattern_comparison/')
 
-            save_path = path_to_figures+ cluster + 'plots_gene_pattern_comparison/'+str(gene_list) + ".pdf"
-            plt.savefig(save_path)
+            save_path = path_to_figures+ 'plots_gene_pattern_comparison/'+cluster+'_'+str(gene_list) + ".pdf"
+            plt.savefig(save_path, bbox_inches = 'tight')
             plt.show()

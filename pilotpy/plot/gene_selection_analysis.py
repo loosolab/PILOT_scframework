@@ -919,10 +919,10 @@ def plot_gene_list_pattern(gene_list: list,
                 axes[g, c].set_axis_off()
     
     fig.get_layout_engine().set(hspace=0.2, wspace=0.1)
-    plt.savefig(path_to_figures + 'genes_selection_analysis/' + cell_type + '/' + str(gene_list) + '_gene_list_patterns.pdf')
+    fig.savefig(path_to_figures + 'gene_list_pattern/' + cell_type + '/' + str(gene_list) + '.pdf')
     plt.show() 
+    plt.close(fig)
 
-  
 def genes_selection_analysis(
         adata: ad.AnnData,
         cell_type: str,
