@@ -1123,13 +1123,13 @@ def extract_cells_from_pathomics(adata,path=None):
     orders=adata.uns['orders']
     data['sampleID']=list(annot['sampleID'])
     joint=pd.merge(data,orders,on='sampleID')
-    if not os.path.exists(path+'/cells/'):  
-                    os.makedirs(path+'/cells/')
-    joint.to_csv(path+'/cells/'+'All.csv')
+    if not os.path.exists(path+'cells/'):  
+                    os.makedirs(path+'cells/')
+    joint.to_csv(path+'cells/'+'All.csv')
  
 
 
-def gene_cluster_differentiation(adata,cellnames=[],sort=['Expression pattern', 'adjusted P-value', 'R-squared'],number_genes=10,cluster_names=[],font_size=14,gene_list=[], path='Results_PILOT'):
+def gene_cluster_differentiation(adata,cellnames=[],sort=['Expression pattern', 'adjusted P-value', 'R-squared'],number_genes=10,cluster_names=[],font_size=14,gene_list=[], path='Results_PILOT/'):
     
     """
     Perform gene cluster differentiation analysis.
@@ -1157,13 +1157,13 @@ def gene_cluster_differentiation(adata,cellnames=[],sort=['Expression pattern', 
     None.
     Performs gene cluster differentiation analysis based on specified parameters and saves the results.
     """
-    path= path
+
     start=min(adata.uns['orders']['Time_score'])
     end=max(adata.uns['orders']['Time_score'])
     if len(gene_list)==0:
         gene_list=[]
         for cell in cellnames: #Your interested cell, this gets the genes of these cells and compares with others
-            data = pd.read_csv(path + '/Markers/' + cell + '/Whole_expressions.csv', index_col = 0)
+            data = pd.read_csv(path + 'Markers/' + cell + '/Whole_expressions.csv', index_col = 0)
             specific_data = data.sort_values(sort,
                        ascending=[True, True, False]).groupby('Expression pattern').head(number_genes)
             gene_list.extend(specific_data['Gene ID'].tolist())

@@ -774,7 +774,7 @@ def save_data(dictionary, column_names,save_path,name,p_val,pro,gprofil=False, o
 
 
         df=statistics(mat_df)
-        print ('For this cell_type, p-value of  {} genes are statistically significant.'.format(len(mat_df)))
+        print(f'For \033[1m{name}\033[0m, p-value of {len(mat_df)} genes are statistically significant.')
         print(df)
 
 
