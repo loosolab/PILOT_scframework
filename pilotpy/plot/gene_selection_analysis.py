@@ -820,8 +820,6 @@ def plot_gene_list_pattern(gene_list: list,
         Plot genes pattern for specific cell type
 
     """
-    path_to_figures = path_to_figures
-    path_to_tables = path_to_tables
 
     if len(gene_list) > len(set(gene_list)):
         return "The gene list is not unique!"
@@ -919,7 +917,9 @@ def plot_gene_list_pattern(gene_list: list,
                 axes[g, c].set_axis_off()
     
     fig.get_layout_engine().set(hspace=0.2, wspace=0.1)
-    fig.savefig(path_to_figures + 'gene_list_pattern/' + cell_type + '/' + str(gene_list) + '.pdf')
+    if not os.path.exists(path_to_figures + 'gene_list_pattern/' + cell_type + '/'):
+        os.makedirs(path_to_figures + 'gene_list_pattern/' + cell_type + '/')
+    fig.savefig(path_to_figures + 'gene_list_pattern/' + cell_type + '/' + str(gene_list) + '.pdf', bbox_inches = 'tight')
     plt.show() 
     plt.close(fig)
 
