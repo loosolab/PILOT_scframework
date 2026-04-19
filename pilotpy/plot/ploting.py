@@ -783,8 +783,6 @@ def exploring_specific_genes(
     Returns:
         Show the genes for the interested cell types
     """
-    path_to_tables=path_to_tables
-    path_to_figures=path_to_figures
 
     file_name = "/Whole_expressions.csv"
     cluster_names = [os.path.splitext(f)[0] for f in listdir(path_to_tables + 'cells/') \
@@ -2104,25 +2102,24 @@ def plot_stats_by_pattern(cluster_names: list = None,
 
         if num_genes: 
 
-            n_col = 3
             n_row = int(np.ceil(num_genes/ 3))
 
             # Adjust the size of individual subplots
             if axis == "numeric":
-                subplot_width = 3 * len(labels)  # Choose an appropriate value
-                subplot_height = subplot_width /4  # Choose an appropriate value
+                subplot_width = len(labels)  # Choose an appropriate value
+                subplot_height = subplot_width * n_row # Choose an appropriate value
             else:
-                subplot_width = 4.5 * len(labels)  # Choose an appropriate value
-                subplot_height = subplot_width /4  # Choose an appropriate value
+                subplot_width = len(labels)  # Choose an appropriate value
+                subplot_height = subplot_width * n_row  # Choose an appropriate value
 
-            total_plots = n_row * n_col          
+            total_plots = n_row * 3         
             
-            f, axs = plt.subplots(n_row, n_col, figsize=(n_col * subplot_width, n_row * subplot_height))
+            f, axs = plt.subplots(n_row, 3, figsize=(5.5 * subplot_width, 1.15 * subplot_height))
             axs = np.atleast_2d(axs)
 
 
             for idx, row in genes.iterrows():
-                r, c = divmod(idx, n_col)
+                r, c = divmod(idx, 3)
 
                 cluster_n = row['cluster']
                 gene_name = row['gene']
@@ -2140,15 +2137,17 @@ def plot_stats_by_pattern(cluster_names: list = None,
                 if axis == "categoric":
                     axs[r, c].set_xticks(range(1,(len(labels)+1)), labels=labels['real_labels'], rotation=45, ha='right')
 
+                axs[r, c].set_xlim(0.7, len(labels) + 0.2)
+
                 if(KO_x is not None):
                     axs[r, c].plot(np.linspace(min(WT_x),max(WT_x)), KO_curve,
                                        c = "dimgray", linewidth = 4.0)
                 axs[r, c].plot(np.linspace(min(WT_x),max(WT_x)), WT_curve,
                                 c = "tab:orange", linewidth = 4.0)
 
-                axs[r, c].set_title(gene_name, size = font_size, weight = 'bold')
+                axs[r, c].set_title(gene_name, weight = 'bold', pad=20)
                 if( c == 0):
-                    axs[r, c].set_ylabel("Gene expression", size = font_size-4)
+                    axs[r, c].set_ylabel("Gene expression", labelpad=12)
                 #else:
                         
                     #   axs[r, c].set_ylabel('Gene expression', size = 16)

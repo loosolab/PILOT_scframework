@@ -7,6 +7,7 @@ Created on Thu Apr 18 17:29:07 2024
 """
 
 import os
+from turtle import width
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -26,6 +27,7 @@ from decimal import Decimal
 from IPython.display import IFrame
 import json
 import requests
+import time
 import gseapy as gp
 
 from .curve_activity import _curvesnamic_network_char_terminal_logfc_, \
@@ -778,8 +780,9 @@ def  plot_top_genes_patterns(rank_genes: pd.DataFrame,
     plt.savefig(path_to_figures + 'genes_selection_analysis/' + cell_type + '/' + 'top_genes_patterns.pdf')
     plt.show()
   
-def plot_gene_list_pattern(gene_list: list,
-                            cell_type: str,
+def plot_gene_list_pattern( adata: ad.AnnData,
+                            gene_list: list,
+                            cluster: str,
                             sample_col: str = 'sampleID',
                             time_col: str = 'Time_score',
                             plot_color: str = 'tab:orange',
@@ -825,12 +828,12 @@ def plot_gene_list_pattern(gene_list: list,
         return "The gene list is not unique!"
     
     try:
-        if '/' in cell_type:
-            cell_type = cell_type.replace('/', '_')
-        cells = pd.read_csv(path_to_tables + "cells/" + str(cell_type) + ".csv",
+        if '/' in cluster:
+            cluster = cluster.replace('/', '_')
+        cells = pd.read_csv(path_to_tables + "cells/" + str(cluster) + ".csv",
                                 usecols = np.concatenate((np.array([sample_col, time_col]), gene_list)))
     except ValueError:
-        return "Some of the genes are not exists in cell type " + str(cell_type) + "!"
+        return "Some of the genes are not exists in cell type " + str(cluster) + "!"
         
     scaler = StandardScaler()
     scaled_cells = pd.DataFrame(scaler.fit_transform(cells.iloc[:, 2:]))
@@ -839,7 +842,7 @@ def plot_gene_list_pattern(gene_list: list,
     scaled_cells[[sample_col, time_col]] = cells[[sample_col, time_col]].values
     
     try:
-        table = pd.read_csv(path_to_tables + "/Markers/" + str(cell_type) + "/Whole_expressions.csv", index_col = 0)
+        table = pd.read_csv(path_to_tables + "/Markers/" + str(cluster) + "/Whole_expressions.csv", index_col = 0)
         table.index = table['Gene ID']
         table = table.loc[gene_list]
     except KeyError:
@@ -859,15 +862,17 @@ def plot_gene_list_pattern(gene_list: list,
     
     n_px = 5
     n_clusters = range(3)
-    
+    row = int(np.ceil(len(gene_list) / 3))
+    width = len(adata.uns['orders'])
+    height = width * row
     
     if (axis == "numeric"):
-        fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), 3, constrained_layout= True,
-                                 figsize=(3 * n_px * 2, int(np.ceil(len(gene_list) / 3)) * 3 * n_px / 2))
+        fig, axes = plt.subplots(row, 3, constrained_layout= True,
+                                 figsize=(3 * n_px * 2, row * 3 * n_px / 2))
         axes = np.atleast_2d(axes)
     elif (axis == "categoric"):
-        fig, axes = plt.subplots(int(np.ceil(len(gene_list) / 3)), 3, constrained_layout = True,
-                                 figsize=(4.5 * len(pseudotime_sample_names.sampleID.values), 4.5 * len(pseudotime_sample_names.sampleID.values) / 4 * int(np.ceil(len(gene_list) / 3))))
+        fig, axes = plt.subplots(row, 3, constrained_layout = True,
+                                 figsize=(width*5.5, height*1.15))
         axes = np.atleast_2d(axes)
 
     for c in n_clusters:
@@ -888,11 +893,12 @@ def plot_gene_list_pattern(gene_list: list,
                 if (axis == "numeric"):
                     axes[g, c].set_xticklabels(axes[g, c].get_xticks().astype(int)) 
                 elif (axis == "categoric"):
-                    axes[g, c].set_xticks(range(1, (len(pseudotime_sample_names.sampleID.values)+1)), labels= pseudotime_sample_names.sampleID.values, rotation=45, ha='right')
-
+                    axes[g, c].set_xticks(range(1, (len(adata.uns['orders'])+1)), labels= adata.uns['orders']['sampleID'], rotation=45, ha='right')
+                
+                axes[g, c].set_xlim(0.5, len(adata.uns['orders']) + 0.5) 
                 axes[g, c].set_title(gene_name,
-                                     size = (fontsize - 2) * len(n_clusters),
-                                     weight = 'bold')
+                                     weight = 'bold',
+                                     pad= 20)
     
                 for item in (axes[g, c].get_xticklabels() + axes[g, c].get_yticklabels()):
                         item.set_fontsize( (fontsize - 4) * len(n_clusters))
@@ -911,8 +917,9 @@ def plot_gene_list_pattern(gene_list: list,
                                     size = (fontsize - 4) * len(n_clusters))
                 
                 if c == 0:
-                    axes[g, c].set_ylabel('Gene expression',
-                                          size = (fontsize - 4) * len(n_clusters))
+                    axes[g, c].set_ylabel('Gene expression', 
+                                          size=28,
+                                          labelpad=12)
             else:
                 axes[g, c].set_axis_off()
     
@@ -1465,6 +1472,7 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
             enrichr_results = gp.enrichr(gene_list = list(curves_activities[curves_activities['cluster'] == cluster].index.values), 
                                  gene_sets = gene_set_library, 
                                  organism = organism)
+            time.sleep(2)
             data_df = enrichr_results.results[col_names]
             data_df['cluster'] = cluster
             GO_terms = pd.concat([GO_terms, data_df])
