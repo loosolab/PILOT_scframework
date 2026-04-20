@@ -2160,7 +2160,7 @@ def plot_stats_by_pattern(cluster_names: list = None,
                     axs[r, c].yaxis.set_major_formatter(FormatStrFormatter('%.1f'))
 
                 for empty_idx in range(num_genes, total_plots):
-                     r, c = divmod(empty_idx, n_col)
+                     r, c = divmod(empty_idx, 3)
                      axs[r, c].set_axis_off()
         
             plt.tight_layout(h_pad=0.2, w_pad=0.1)
