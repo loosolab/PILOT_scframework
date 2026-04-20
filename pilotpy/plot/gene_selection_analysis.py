@@ -899,7 +899,7 @@ def plot_gene_list_pattern( adata: ad.AnnData,
                 elif (axis == "categoric"):
                     axes[g, c].set_xticks(range(1, (len(adata.uns['orders'])+1)), labels= adata.uns['orders']['sampleID'], rotation=45, ha='right')
                 
-                axes[g, c].set_xlim(0.5, len(adata.uns['orders']) + 0.5) 
+                axes[g, c].set_xlim(0.6, len(adata.uns['orders']) + 0.3) 
                 axes[g, c].set_title(gene_name,
                                      weight = 'bold',
                                      pad= 20)
@@ -919,18 +919,18 @@ def plot_gene_list_pattern( adata: ad.AnnData,
                                     ha = 'right', va = 'top',
                                     transform=axes[g, c].transAxes,
                                     size = (fontsize - 4) * len(n_clusters))
-                
+            
                 if c == 0:
                     axes[g, c].set_ylabel('Gene expression', 
                                           size=28,
                                           labelpad=12)
             else:
                 axes[g, c].set_axis_off()
-    
+
     fig.get_layout_engine().set(hspace=0.2, wspace=0.1)
-    if not os.path.exists(path_to_figures + 'gene_list_pattern/' + cell_type + '/'):
-        os.makedirs(path_to_figures + 'gene_list_pattern/' + cell_type + '/')
-    fig.savefig(path_to_figures + 'gene_list_pattern/' + cell_type + '/' + str(gene_list) + '.pdf', bbox_inches = 'tight')
+    if not os.path.exists(path_to_figures + 'gene_list_pattern/' + cluster + '/'):
+        os.makedirs(path_to_figures + 'gene_list_pattern/' + cluster + '/')
+    fig.savefig(path_to_figures + 'gene_list_pattern/' + cluster + '/' + str(gene_list) + '.pdf', bbox_inches = 'tight')
     plt.show() 
     plt.close(fig)
 
