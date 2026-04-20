@@ -846,7 +846,11 @@ def plot_gene_list_pattern( adata: ad.AnnData,
         table.index = table['Gene ID']
         table = table.loc[gene_list]
     except KeyError:
-        return "There is no good fit for some of the genes!"
+        for gene in gene_list:
+            if gene not in table.index:
+                print("There is no good fit for " + str(gene) + "!")
+        return 
+
     
     # Get the pseudotime points
     pseudotime_sample_names = cells[['sampleID', 'Time_score']].groupby('Time_score').first()
