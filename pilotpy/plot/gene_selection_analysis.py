@@ -1473,10 +1473,16 @@ def plot_hallmark_genes_clusters(adata: ad.AnnData,
         
         GO_terms = pd.DataFrame(columns = col_names)
         for cluster in np.unique(curves_activities['cluster']):
-            enrichr_results = gp.enrichr(gene_list = list(curves_activities[curves_activities['cluster'] == cluster].index.values), 
-                                 gene_sets = gene_set_library, 
-                                 organism = organism)
-            time.sleep(2)
+
+            for i in range(5):
+                try:
+                    enrichr_results = gp.enrichr(gene_list = list(curves_activities[curves_activities['cluster'] == cluster].index.values), 
+                                                gene_sets = gene_set_library, 
+                                                organism = organism)
+                    break
+                except Exception:
+                    time.sleep(2* i)
+
             data_df = enrichr_results.results[col_names]
             data_df['cluster'] = cluster
             GO_terms = pd.concat([GO_terms, data_df])
